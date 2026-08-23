@@ -17,31 +17,46 @@ JVM codebases. The principles in `PRINCIPLES.md` are language-neutral; the mecha
 they are matched against are their Java instantiation, and orientation reads JVM
 build files.
 
-## Invocation
-
-The target is the current diff by default. Also accepts a PR number, a branch (review
-its diff against the default branch), or a module path (review the module as it
-stands).
+The unit of review is a body of code, however it is selected: the current diff (the
+default), a PR number, a branch (its diff against the default branch), or a module
+path. A diff is a way of selecting code under review, not a different kind of
+review — the same analysis applies, with the diff marking where change is happening.
 
 ## Procedure
 
 1. **Orient.** Read the build/module graph — `settings.gradle` or Maven `pom.xml`s,
    module build files, package structure, imports — to establish two facts before
    judging anything:
-   - What kind of code each changed file is: domain logic, a boundary interface, or
-     a translation layer at an external edge. Severity depends on this — the same
-     construct can be correct in an edge translation layer and a defect in interior
-     logic.
+   - What kind of code each file under review is: domain logic, a boundary
+     interface, or a translation layer at an external edge. The same construct can
+     be correct in an edge translation layer and a defect in interior logic.
    - Which modules are allowed to depend on which. The module graph is the ground
      truth for every dependency-direction judgment. Roles are inferred from
      structure; nothing is configured.
-2. **Read the diff with enough surrounding context to judge**: the callers of
-   changed code, the contract being changed, and the module's existing conventions.
+2. **Read the code under review and its callers.** Caller analysis is not optional
+   context — it is how contracts are judged (who actually depends on what) and how
+   the feasibility of any restructuring is assessed (what a change to this seam
+   would pull in).
 3. **Judge against `PRINCIPLES.md`.** Read it in full before reporting. Every
    finding names a concrete failure scenario — specific inputs or state leading to a
    specific wrong outcome. A concern that cannot be stated as a failure scenario is
    not reported.
-4. **Report findings** in the contract below, as a structured chat report, ordered
+4. **Where the code fights its surroundings, classify the impedance mismatch.** When
+   a change is awkward — it contorts to fit the shape of the code it lands in — the
+   surrounding architecture is in scope, not just the lines under review. Go one
+   level deeper: describe, in a vacuum, the ideal shape of this seam; then use the
+   caller analysis to determine what stands between the code and that shape.
+5. **Enumerate options before grading.** For each structural finding, put the real
+   options on the table before judging severity:
+   - accept the code as it stands;
+   - a small enabling refactor first, after which the change flows — name the
+     refactor and what it touches;
+   - the larger restructure — name its blast radius from the caller analysis.
+   Grading happens after the options exist, because severity depends on the option
+   set: a mismatch resolved by a small enabling refactor is actionable now and
+   graded on that basis; one requiring a migration is reported with its cost, not
+   silently dropped and not graded as if the cheap fix existed.
+6. **Report findings** in the contract below, as a structured chat report, ordered
    most severe first.
 
 ## Findings contract
@@ -52,7 +67,10 @@ Each finding carries:
 - **principle** — the principle from `PRINCIPLES.md`, cited by name
 - **claim** — one sentence stating the defect
 - **failure scenario** — concrete inputs or state leading to a concrete wrong outcome
-- **severity** — `blocker` | `suggestion` | `nit`
+- **options** — for structural findings: the enumerated remediation options
+  (as-is / enabling refactor / restructure), each with what it touches per the
+  caller analysis
+- **severity** — `blocker` | `suggestion` | `nit`, graded after the options exist
 - **confidence** — `confirmed` (verified against the code and its callers) |
   `probable` (consistent with everything read, not fully traced) | `speculative`
   (depends on unverified assumptions)
@@ -63,12 +81,15 @@ examined.
 
 ## Posture
 
-- Scope is deliberately narrow: the diff and the contracts it changes. Hold new API
-  surface to the standard; do not demand refactors of pre-existing style. Within
-  that scope, report everything true, with evidence, regardless of expected
-  pushback — severity and confidence are carried in each finding so consumers can
-  make their own policy decisions. A low-confidence finding is reported with its
-  confidence marked low, not suppressed.
+- The code under review is the entry point, not the fence. Code that doesn't make
+  sense because the architecture around it is already broken is squarely in scope:
+  that is when the review earns its name, by classifying the mismatch, describing
+  the ideal shape, and enumerating the path there. "Pre-existing" is context that
+  shapes the options and the grade, never grounds for silence.
+- Report everything true, with evidence, regardless of expected pushback — severity
+  and confidence are carried in each finding so consumers can make their own policy
+  decisions. A low-confidence finding is reported with its confidence marked low,
+  not suppressed.
 - Severity is location-dependent. Judge each construct against the role of the code
   it sits in (from the orientation step), not against a universal rule.
 - Anti-noise commitments — violating either of these is itself a defective review:

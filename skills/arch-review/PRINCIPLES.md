@@ -122,8 +122,9 @@ same-module components — try/catch around an internal call, retries around
 deterministic in-process code — points at a defect: either the internal component
 signals failure where it should return a value or uphold an invariant (the finding
 is that component's contract), or the author distrusts the module's own invariants
-(the finding is the misplaced boundary). When the diff owns only the call site,
-report a suggestion aimed at the component, not a blocker on the catch.
+(the finding is the misplaced boundary). Aim the finding at the component's
+contract, with fixing the component — so the catch can be deleted — enumerated as
+the enabling option; the catch itself is the evidence, not the target.
 
 **One boundary, one translation.** Each boundary crossing owns exactly one
 translation of what passes through it. Translating twice within one hop adds nesting
