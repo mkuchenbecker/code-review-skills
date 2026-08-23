@@ -59,11 +59,10 @@ review: the same analysis applies, with the diff marking where change is happeni
    graded on that basis; one requiring a migration is reported with its cost, not
    silently dropped and not graded as if the cheap fix existed.
 6. **Report findings** in the contract below, as a structured chat report, ordered
-   most severe first. Write the report itself per the writing rules at
-   https://github.com/mkuchenbecker/humanizer/blob/main/STRUCTURE.md (verdict
-   first; tables where findings share fields; no hedging that would not change a
-   conclusion). If that reference is unreachable, proceed without it; it is a
-   style dependency, not a correctness one.
+   most severe first. Write the report per the writing rules at
+   https://github.com/mkuchenbecker/humanizer/blob/main/STRUCTURE.md. If that
+   reference is unreachable, proceed without it; it is a style dependency, not a
+   correctness one.
 
 ## Findings contract
 
