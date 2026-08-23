@@ -21,11 +21,11 @@ and the external writing reference) and this instruction, withholding
 
 **2. Grade.** Give a second agent the report and `expected.json`:
 
-- **Recall** — every `must_find` entry matched by a finding in its file citing
+- **Recall**: every `must_find` entry matched by a finding in its file citing
   one of its principles (match by file and principle name; `detail`
   disambiguates). Pass: 7/7.
-- **Restraint** — zero findings on `fixture/docs/design/id-format.md`.
-- **Precision** — findings matching neither `must_find` nor `allowed_extras`
+- **Restraint**: zero findings on `fixture/docs/design/id-format.md`.
+- **Precision**: findings matching neither `must_find` nor `allowed_extras`
   count against precision. Pass: 0 unmatched.
 
 The suite passes when all three pass. A miss or a restraint violation is a

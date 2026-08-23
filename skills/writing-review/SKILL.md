@@ -1,6 +1,6 @@
 ---
 name: writing-review
-description: Review of prose changed in a diff, PR, branch, or named document — design docs, READMEs, comments, commit messages, PR descriptions, and any other writing. Judges document structure (conclusion placement, tables versus lists, caveats, layering, whether the document stands on its own) and sentence-level AI-writing patterns against an external writing reference, and reports findings diagnosed at the structural cause. Design documents are additionally judged against the prescribed design-doc structure in DESIGN-DOCS.md. Use this whenever the user asks for a review of documentation, a design doc, writing quality, clarity, or AI-sounding prose.
+description: Review of prose changed in a diff, PR, branch, or named document: design docs, READMEs, comments, commit messages, PR descriptions, and any other writing. Judges document structure (conclusion placement, tables versus lists, caveats, layering, whether the document stands on its own) and sentence-level AI-writing patterns against an external writing reference, and reports findings diagnosed at the structural cause. Design documents are additionally judged against the prescribed design-doc structure in DESIGN-DOCS.md. Use this whenever the user asks for a review of documentation, a design doc, writing quality, clarity, or AI-sounding prose.
 ---
 
 # Writing review
@@ -21,8 +21,8 @@ review time:
 
 The reference tracks `main` deliberately: a style guide is policy, and reviews
 should apply current policy. If the reference is unreachable at review time, say
-so in the report and proceed on the summary below — it is a condensed copy, and
-the external files are the source of truth.
+so in the report and proceed on the summary below, a condensed copy; the
+external files are the source of truth.
 
 Condensed structure rules (fallback only): conclusion on top, at every scale,
 stated as a disputable or actionable claim; context-bearing lists become tables,
@@ -56,13 +56,13 @@ of attention; a single read does neither well.
 
 1. Identify the prose in the target and what genre each piece is: a design doc,
    a README, API documentation, a comment, a commit message. Genre sets
-   expectations — a design doc is judged against DESIGN-DOCS.md, a code comment
+   expectations: a design doc is judged against DESIGN-DOCS.md, a code comment
    against far narrower rules.
 2. Fetch the criteria (see above); fall back to the condensed copy if
    unreachable, and say so. Both rule sets stay in context for every pass.
 3. **Structure pass.** Read the whole document for shape only: conclusion
-   placement, list/table choices, caveat inventory, standalone-ness, layering,
-   and the genre structure where one applies.
+   placement, list/table choices, caveat inventory, whether it stands on its
+   own, layering, and the genre structure where one applies.
 4. **Sentence pass.** Read the whole document again for lines only, against the
    pattern catalog.
 5. **Merge.** Deduplicate: a sentence-level finding whose cause is a structural
@@ -74,15 +74,15 @@ of attention; a single read does neither well.
 
 ## Findings contract
 
-- **location** — file and line, or section heading for prose without stable lines
-- **principle** — the rule from the writing reference (or DESIGN-DOCS.md), by name
-- **claim** — one sentence stating the defect
-- **failure scenario** — which reader is harmed and how
-- **severity** — `blocker` (a reader will act wrongly or the document cannot be
+- **location**: file and line, or section heading for prose without stable lines
+- **principle**: the rule from the writing reference (or DESIGN-DOCS.md), by name
+- **claim**: one sentence stating the defect
+- **failure scenario**: which reader is harmed and how
+- **severity**: `blocker` (a reader will act wrongly or the document cannot be
   used without its author) | `suggestion` (a reader pays avoidable cost) |
   `nit` (polish)
-- **confidence** — `confirmed` | `probable` | `speculative`
-- **reviewer** — `writing-review`
+- **confidence**: `confirmed` | `probable` | `speculative`
+- **reviewer**: `writing-review`
 
 ## Posture
 

@@ -36,8 +36,8 @@ The six sections are the shape, not a quota. A small design may merge the sketch
 and the details into one section, or fold background into a sentence instead of
 an appendix; the absence of a separate section is not a defect when the content
 it would carry is present and sufficient at the change's size. Flag a missing
-layer only when a reader is left without something they need — an implementer
-with no specifics, a reviewer with no comparison — not because a heading from
+layer only when a reader is left without something they need (an implementer
+with no specifics, a reviewer with no comparison), not because a heading from
 this file is absent.
 
 The general structure rules in the writing reference apply on top of this genre

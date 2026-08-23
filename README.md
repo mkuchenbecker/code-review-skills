@@ -15,14 +15,15 @@ below) but never on its consumers, so each can be installed and invoked on its o
 ## Writing
 
 Skills follow the writing rules published at
-[mkuchenbecker/humanizer](https://github.com/mkuchenbecker/humanizer) — structure
+[mkuchenbecker/humanizer](https://github.com/mkuchenbecker/humanizer): structure
 rules in
-[STRUCTURE.md](https://github.com/mkuchenbecker/humanizer/blob/main/STRUCTURE.md),
-sentence-level patterns in
-[SKILL.md](https://github.com/mkuchenbecker/humanizer/blob/main/SKILL.md) — both
-when reviewing prose (`writing-review` fetches them as its criteria) and when
-writing their own reports and PR text. The reference tracks `main` on purpose: a
-style guide is policy, and both uses want current policy. If it is unreachable at
+[STRUCTURE.md](https://github.com/mkuchenbecker/humanizer/blob/main/STRUCTURE.md)
+and sentence-level patterns in
+[SKILL.md](https://github.com/mkuchenbecker/humanizer/blob/main/SKILL.md). The
+rules apply both when reviewing prose (`writing-review` fetches them as its
+criteria) and when skills write their own reports and PR text. The reference
+tracks `main` on purpose: a style guide is policy, and both uses want current
+policy. If it is unreachable at
 run time, skills say so and proceed; it is a style dependency, not a correctness
 one.
 
@@ -62,5 +63,5 @@ cp -r skills/arch-review /path/to/your-repo/.claude/skills/arch-review
 ## Invocation
 
 Invoke by name (`/arch-review`, optionally with a PR number, branch, or module
-path), or just ask for the kind of review the skill's description covers — the
+path), or just ask for the kind of review the skill's description covers; the
 description is written so the skill triggers on matching requests.
