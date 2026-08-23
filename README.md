@@ -9,7 +9,7 @@ about who consumes their findings, so each can be installed and invoked on its o
 
 | Skill | Reviews |
 |---|---|
-| [`arch-review`](skills/arch-review/SKILL.md) | Decomposition in JVM codebases: module topology, interface contracts, ownership of decisions, and error design. Findings are diagnosed at the structural cause (a boundary, a contract, a seam), not the surface pattern. |
+| [`arch-review`](skills/arch-review/SKILL.md) | Decomposition: module topology, interface contracts, ownership of decisions, and error design. Language-agnostic principles with Java examples. Findings are diagnosed at the structural cause (a boundary, a contract, a seam), not the surface pattern. |
 
 ## Layout
 
@@ -21,6 +21,9 @@ skills/<name>/
                   # procedure, posture, and the findings contract
   *.md            # reference documents the skill reads while reviewing
                   # (e.g. arch-review/PRINCIPLES.md)
+  verification/   # the skill's self-contained verification suite: a seeded
+                  # fixture, a machine-checkable expected.json, and VERIFY.md
+                  # as the entry point — re-runnable with no human grading
 ```
 
 `SKILL.md` is what triggers and drives the review; the reference documents beside it
