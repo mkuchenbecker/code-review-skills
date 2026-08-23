@@ -46,18 +46,30 @@ of review.
 
 ## Procedure
 
+The review is multiple passes over the document, not one sweep. Each pass is a
+separate, complete read hunting one layer, and every pass has both rule sets in
+context: the structure pass needs the sentence catalog to recognize that a pile
+of sentence-level tells is evidence for a structural finding, and the sentence
+pass needs the structure rules to report a tell at its structural cause instead
+of duplicating the symptom. Shape-reading and line-reading are different modes
+of attention; a single read does neither well.
+
 1. Identify the prose in the target and what genre each piece is: a design doc,
    a README, API documentation, a comment, a commit message. Genre sets
    expectations — a design doc is judged against DESIGN-DOCS.md, a code comment
    against far narrower rules.
 2. Fetch the criteria (see above); fall back to the condensed copy if
-   unreachable, and say so.
-3. Judge structure first: conclusion placement, list/table choices, caveat
-   inventory, standalone-ness, layering. Then judge sentences against the
+   unreachable, and say so. Both rule sets stay in context for every pass.
+3. **Structure pass.** Read the whole document for shape only: conclusion
+   placement, list/table choices, caveat inventory, standalone-ness, layering,
+   and the genre structure where one applies.
+4. **Sentence pass.** Read the whole document again for lines only, against the
    pattern catalog.
-4. For structural findings, name the failure scenario in reader terms: who reads
-   this, where they stop, what they miss or misjudge because of the defect.
-5. Report findings in the contract below, as a structured chat report, ordered
+5. **Merge.** Deduplicate: a sentence-level finding whose cause is a structural
+   finding folds into it as evidence, not a separate entry. For structural
+   findings, name the failure scenario in reader terms: who reads this, where
+   they stop, what they miss or misjudge because of the defect.
+6. Report findings in the contract below, as a structured chat report, ordered
    most severe first. A report with zero findings states that explicitly.
 
 ## Findings contract

@@ -57,6 +57,21 @@
       "id": "analysis-section-filler",
       "file": "fixture/docs/design/retry-policy.md",
       "detail": "the Analysis section says nothing beyond its hedges ('strengths and weaknesses', 'depending on one's perspective') and can be flagged as filler or a formulaic pattern beyond the hedge-pile finding"
+    },
+    {
+      "id": "chosen-option-never-elaborated",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the recommended option (typed retry policy) gets no sketch or details anywhere in the document; the flip side of the alternative-elaborated-inline seed and a genuine defect"
+    },
+    {
+      "id": "untiered-requirements",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the requirements carry no must/should tiers; often reported alongside or within the no-non-goals and hedge-pile findings"
+    },
+    {
+      "id": "no-problem-statement",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the document never states the problem it solves; often reported together with the self-describing opener at the same lines"
     }
   ]
 }

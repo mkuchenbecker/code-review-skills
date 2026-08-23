@@ -11,14 +11,15 @@ requirement each; the comparison is below.
 |---|---|
 | Must | IDs sort by creation time, so claim queries can scan a time range |
 | Must | IDs are globally unique with no coordination between instances |
+| Should | No new infrastructure or allocation services to operate |
 | Won't | IDs will not be human-readable; operators look records up by table name |
 | Out of scope | Migrating existing records; this format applies to new records only |
 
 ## Options
 
 The table compares the options against the requirements; UUIDv7 is the
-recommendation because it is the only option that meets both musts without new
-infrastructure.
+recommendation because it is the only option that meets both musts and the
+should.
 
 | Option | Sorts by time | Unique without coordination | New infrastructure |
 |---|---|---|---|

@@ -30,5 +30,15 @@ A design document is judged against this structure, in this order:
 | A rejected alternative elaborated in the main line | The main line is for the chosen path; alternatives are appendix evidence |
 | Alternatives absent entirely | A decision with no developed alternatives is a conclusion without a comparison; note it at low severity when the change is small enough not to warrant one |
 
+## Sections scale with the change
+
+The six sections are the shape, not a quota. A small design may merge the sketch
+and the details into one section, or fold background into a sentence instead of
+an appendix; the absence of a separate section is not a defect when the content
+it would carry is present and sufficient at the change's size. Flag a missing
+layer only when a reader is left without something they need — an implementer
+with no specifics, a reviewer with no comparison — not because a heading from
+this file is absent.
+
 The general structure rules in the writing reference apply on top of this genre
 structure; this file adds the design-doc shape, it does not replace them.
