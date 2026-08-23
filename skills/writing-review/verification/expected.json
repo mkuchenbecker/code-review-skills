@@ -1,0 +1,62 @@
+{
+  "fixture": "fixture/",
+  "matching": "A must_find entry is matched by a finding located in the named file whose cited principle is any name in `principles`; `detail` disambiguates. A must_not_flag entry is violated by any finding in its file (id-format.md is a restraint control: the whole file must draw zero findings). An allowed_extras entry excuses a finding at its location from counting against precision.",
+  "must_find": [
+    {
+      "id": "buried-hedged-recommendation",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the recommendation (typed retry policy) appears only in the final paragraph, hedged ('seems like it could be', 'would likely recommend')",
+      "principles": ["Conclusion on top", "Recommendation buried", "A caveat must be able to change the conclusion"]
+    },
+    {
+      "id": "options-before-requirements",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the Options section precedes the Requirements section, so the recommendation is not checkable against pre-committed criteria",
+      "principles": ["Options presented before requirements", "Requirements precede options"]
+    },
+    {
+      "id": "no-non-goals",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "requirements have no must/should tiers and no won't or out-of-scope statements",
+      "principles": ["No won't or out-of-scope statements", "Requirements absent"]
+    },
+    {
+      "id": "alternative-elaborated-inline",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the retry-everything option (not the recommended one) is elaborated at length in the main line ('deserves a closer look... forty lines... shipped in a day')",
+      "principles": ["A rejected alternative elaborated in the main line", "Conclusion on top"]
+    },
+    {
+      "id": "hedge-pile",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "requirements and analysis are drenched in non-consequential hedges ('should probably', 'it is worth noting', 'might also be the case', 'could potentially', 'arguably', 'perhaps', 'generally speaking')",
+      "principles": ["A caveat must be able to change the conclusion"]
+    },
+    {
+      "id": "self-describing-opener",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the document opens by describing itself ('This document explores... aims to provide a comprehensive overview') instead of stating its conclusion",
+      "principles": ["The document stands on its own", "Conclusion on top"]
+    },
+    {
+      "id": "bold-label-option-list",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the options are a bold-label bullet list; each item carries the same attributes and the genre calls for the options table",
+      "principles": ["Tables instead of context-heavy lists", "Options with a recommendation, as a table"]
+    }
+  ],
+  "must_not_flag": [
+    {
+      "id": "clean-design-doc",
+      "file": "fixture/docs/design/id-format.md",
+      "detail": "a structurally sound design doc: conclusion first, tiered requirements with won't/out-of-scope, options table with marked recommendation and topping sentence, sketch, appendix with alternatives. Zero findings expected on this file."
+    }
+  ],
+  "allowed_extras": [
+    {
+      "id": "analysis-section-filler",
+      "file": "fixture/docs/design/retry-policy.md",
+      "detail": "the Analysis section says nothing beyond its hedges ('strengths and weaknesses', 'depending on one's perspective') and can be flagged as filler or a formulaic pattern beyond the hedge-pile finding"
+    }
+  ]
+}
