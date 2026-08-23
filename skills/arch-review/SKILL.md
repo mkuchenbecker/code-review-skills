@@ -1,6 +1,6 @@
 ---
 name: arch-review
-description: Architecture review of a diff, PR, branch, or module in a JVM codebase. Judges module boundaries, dependency direction, interface contracts, ownership of decisions, and error design against the principles in PRINCIPLES.md, and reports findings diagnosed at the structural cause rather than the surface pattern. Use this whenever the user asks for an architecture review, a design review, a check of boundaries, coupling, layering, or API shape, or a review of error/exception handling in Java or other JVM code — error handling questions are architecture questions and belong here.
+description: Architecture review of a diff, PR, branch, or module. Judges module boundaries, dependency direction, interface contracts, ownership of decisions, and error design against the principles in PRINCIPLES.md, and reports findings diagnosed at the structural cause rather than the surface pattern. The principles are language-agnostic; their examples are given in Java. Use this whenever the user asks for an architecture review, a design review, a check of boundaries, coupling, layering, or API shape, or a review of error/exception handling in any language — error handling questions are architecture questions and belong here.
 ---
 
 # Architecture Review
@@ -13,9 +13,10 @@ misplaced boundary that made someone write it.
 
 ## Target
 
-JVM codebases. The principles in `PRINCIPLES.md` are language-neutral; the mechanics
-they are matched against are their Java instantiation, and orientation reads JVM
-build files.
+Any codebase with discernible module structure. The principles in `PRINCIPLES.md`
+are language-agnostic; where a principle needs something concrete, its example is
+Java, and the symptom catalog gives Java instantiations — when reviewing another
+language, translate the symptom to that language's idiom rather than skipping it.
 
 The unit of review is a body of code, however it is selected: the current diff (the
 default), a PR number, a branch (its diff against the default branch), or a module
@@ -24,9 +25,10 @@ review — the same analysis applies, with the diff marking where change is happ
 
 ## Procedure
 
-1. **Orient.** Read the build/module graph — `settings.gradle` or Maven `pom.xml`s,
-   module build files, package structure, imports — to establish two facts before
-   judging anything:
+1. **Orient.** Read the build/module graph in whatever form the build system
+   declares it — Gradle `settings.gradle` and module build files, Maven `pom.xml`s,
+   a Cargo or Go workspace, package manifests — plus package structure and imports,
+   to establish two facts before judging anything:
    - What kind of code each file under review is: domain logic, a boundary
      interface, or a translation layer at an external edge. The same construct can
      be correct in an edge translation layer and a defect in interior logic.

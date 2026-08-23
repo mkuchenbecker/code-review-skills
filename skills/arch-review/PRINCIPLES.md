@@ -1,6 +1,8 @@
 # Principles
 
-Each principle is stated with its reason. Findings cite principles by name.
+Each principle is stated with its reason, in language-independent terms; where a
+principle needs something concrete, the example is Java. Findings cite principles
+by name.
 
 ## Axis 1 — Topology: which components may know which
 
@@ -70,24 +72,29 @@ redundant — a null check on a non-nullable type is itself a reportable smell. 
 precondition deep in the call stack that external data can still reach means the
 parse didn't happen; the finding is at the boundary, upstream of the check.
 
-**Outcomes as values.** A sum-typed result makes the failure branch visible at the
-call site, where an exception leaves it invisible and optional to think about.
-Enforcement strength depends on mechanism: a Java sealed interface with record
-variants consumed by exhaustive `switch` expressions makes the branch a compile-time
+**Outcomes as values.** A result modeled as a sum type — one value that is either
+the success or one of the enumerated failures — makes the failure branch visible at
+the call site, where an exception leaves it invisible and optional to think about.
+How strongly the language enforces the branch depends on the mechanism, and the
+distinction matters. Example (Java): a sealed interface with record variants
+consumed by exhaustive `switch` expressions makes the branch a compile-time
 obligation — add a variant and every call site fails to compile until it accounts
-for it, where a new unchecked exception is noticed only in production. A protobuf
-`oneof success|failure` makes the failure representable and visible but not
-compiler-enforced (generated accessors return default instances without a case
-check), so it demands runtime case-checking discipline. Either way: a result that
-can be silently discarded is a swallowed failure — results must be consumed
-(exhaustive switch, or enforcement such as `@CheckReturnValue`).
+for it, where a new unchecked exception is noticed only in production. Example
+(protobuf): a `oneof success|failure` makes the failure representable and visible
+but not compiler-enforced (generated accessors return default instances without a
+case check), so it demands runtime case-checking discipline. In any language: a
+result that can be silently discarded is a swallowed failure — results must be
+consumed (exhaustive matching, or enforcement such as Java's `@CheckReturnValue`).
 
-**Absence is a type.** A null return conflates "legitimately absent" with "someone
-forgot" and defers the failure to a dereference far from the cause; `Optional` or an
-empty collection states absence in the signature and forces the decision at the
-source. Edges: a bare `Optional.get()` reintroduces the deferred crash and reads as
-an unchecked null dereference; `Optional` in fields or parameters adds a third state
-(a null `Optional`) without expressing anything — it earns its place in return types.
+**Absence is a type.** A null/nil return conflates "legitimately absent" with
+"someone forgot" and defers the failure to a dereference far from the cause;
+expressing absence in the type — an option type, an empty collection, a
+compiler-checked nullability annotation — states it in the signature and forces the
+decision at the source. Example (Java): return `Optional` or an empty collection,
+never a null collection; a bare `Optional.get()` reintroduces the deferred crash
+and reads as an unchecked null dereference; `Optional` in fields or parameters adds
+a third state (a null `Optional`) without expressing anything — it earns its place
+in return types.
 
 **Narrow contracts, one seam.** When wide data must enter a component, project it at
 a single seam: one function that turns the wide representation into exactly what the
@@ -95,8 +102,9 @@ component needs, where all judgment about missing or malformed data lives. Judgm
 with an address can be reviewed and changed; judgment smeared as repeated checks
 across layers has no owner, so every layer defends. Parsed inputs consumed through
 narrow contracts make interior functions total — no failure cases left — which is
-when control flow composes cleanly: a `Stream` pipeline stays clean when its stages
-are total, and a try/catch inside a stream lambda, or a checked exception wrapped in
+when control flow composes cleanly in pipelines, comprehensions, and folds.
+Example (Java): a `Stream` pipeline stays clean when its stages are total, and a
+try/catch inside a stream lambda, or a checked exception wrapped in
 `RuntimeException` to get through `map()`, is the sign that IO or an unhandled
 boundary was smuggled into interior code.
 
@@ -151,25 +159,28 @@ a module's external surface, where inputs may be invalid and dependencies may be
 down. Interior code returns values and raises invariant violations; exceptions
 appearing in interior logic mean a boundary is missing or misplaced.
 
-**Defined behavior for bad input.** An undeclared unchecked exception reachable
-through expected input means the method's true contract lives in its implementation;
-callers discover it experimentally and grow blanket try/catch wrappers — a caller
-re-deriving a contract the signature should have stated. `IllegalArgumentException`
-on user-reachable input is the canonical case, and a catch of
-`IllegalArgumentException` thrown by code the author controls is proof of the
-mismodeling: the case was expected, yet declared exceptional. Exemption: JDK and
-third-party APIs whose only failure channel is IAE (`Integer.parseInt` throwing
-`NumberFormatException`, `Enum.valueOf`, `UUID.fromString`) — catching at that parse
-seam and converting to a typed result is exactly what Parse-don't-validate asks for.
+**Defined behavior for bad input.** Incorrect input is an expected outcome and
+deserves defined behavior stated in the signature. An undeclared throw (or panic)
+reachable through expected input means the true contract lives in the
+implementation; callers discover it experimentally and grow blanket defensive
+wrappers — a caller re-deriving a contract the signature should have stated.
+Example (Java): `IllegalArgumentException` on user-reachable input is the canonical
+case, and a catch of `IllegalArgumentException` thrown by code the author controls
+is proof of the mismodeling — the case was expected, yet declared exceptional.
+Exemption: platform and third-party APIs whose only failure channel is such a throw
+(`Integer.parseInt` throwing `NumberFormatException`, `Enum.valueOf`,
+`UUID.fromString`) — catching at that parse seam and converting to a typed result
+is exactly what Parse-don't-validate asks for.
 
 **Fail fast when decidable; halt when not.** If the code can classify what went
 wrong and a caller could act on it, detect at the earliest point and return the
 typed failure — continuing on bad state moves the eventual break far from its cause.
 If an invariant the code relies on is broken, any result would be a lie and there is
-no meaningful error to return: throw an unchecked invariant violation —
-`checkState`, or an explicit `IllegalStateException` — that no interior code
-catches. (The Java `assert` keyword does not count; it is disabled at runtime unless
-`-ea` is set.) The test for any throw site: could this code have decided something?
+no meaningful error to return: raise an invariant violation that no interior code
+catches. Example (Java): `checkState`, or an explicit `IllegalStateException` — not
+the `assert` keyword, which is disabled at runtime unless `-ea` is set and so
+guards nothing in production. The test for any throw site: could this code have
+decided something?
 Yes → typed failure. Genuinely no → the invariant violation is correct, and if
 external input can reach it, the real finding is the missing parse upstream.
 
@@ -191,9 +202,11 @@ error. The cause chain (wrapped exceptions' `cause`) is the legitimate record of
 descent, which is why destroying it — wrapping without the cause, logging only
 `getMessage()` — destroys the evidence debugging needs.
 
-## Mechanics
+## Symptoms
 
-Local Java patterns worth flagging; each finding names the principle, not just the
+Concrete local patterns worth flagging, given here in their Java form — the same
+symptoms exist in every language under different idioms, so translate rather than
+skip when reviewing something else. Each finding names the principle, not just the
 pattern:
 
 - Empty catch; catch-log-continue; return-null-on-failure — the caller proceeds as
