@@ -19,16 +19,28 @@ A design document is judged against this structure, in this order:
    alternatives live here as evidence that they were genuinely developed; the
    options table is the verdict, the appendix is the evidence.
 
+This order is the genre's layering, and it takes precedence over the general
+skeleton for section order: within a design document, the options table's
+recommendation is the document's conclusion, and a document that follows the
+six sections complies with Conclusion on top and Layering at the document
+scale. Those rules still govern inside each section (every section leads with
+its point). Judge conclusion placement against this order, never against the
+general TLDR-first skeleton.
+
 ## What to flag
 
-| Defect | Why it matters |
-|---|---|
-| Recommendation absent, buried in details, or stated only at the end | The document's conclusion is its recommendation; readers triage on it |
-| Options presented before requirements, or requirements absent | The recommendation cannot be checked against pre-committed criteria; the document reads as advocacy |
-| No "won't" or out-of-scope statements | Scope ambiguity survives into review; omissions get relitigated as oversights |
-| An option's criteria columns don't match the stated requirements | The evaluation quietly used different criteria than it committed to |
-| A rejected alternative elaborated in the main line | The main line is for the chosen path; alternatives are appendix evidence |
-| Alternatives absent entirely | A decision with no developed alternatives is a conclusion without a comparison; note it at low severity when the change is small enough not to warrant one |
+The table lists the genre's defects with the severity each normally carries;
+the first two rows dominate, because they decide whether the document can
+function as a decision record at all.
+
+| Defect | Why it matters | Severity |
+|---|---|---|
+| Recommendation absent, buried in details, or stated only at the end | The document's conclusion is its recommendation; readers triage on it | `blocker` |
+| Options presented before requirements, or requirements absent | The recommendation cannot be checked against pre-committed criteria; the document reads as advocacy | `blocker` |
+| No "won't" or out-of-scope statements | Scope ambiguity survives into review; omissions get relitigated as oversights | `suggestion` |
+| An option's criteria columns don't match the stated requirements | The evaluation quietly used different criteria than it committed to | `suggestion` |
+| A rejected alternative elaborated in the main line | The main line is for the chosen path; alternatives are appendix evidence | `suggestion` |
+| Alternatives absent entirely | A decision with no developed alternatives is a conclusion without a comparison | `nit` when the change is small enough not to warrant them; otherwise `suggestion` |
 
 ## Sections scale with the change
 

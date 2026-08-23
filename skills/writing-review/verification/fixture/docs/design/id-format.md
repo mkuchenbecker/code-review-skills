@@ -1,9 +1,11 @@
 # ID format for operation records
 
-We will use UUIDv7 for operation record IDs. It is time-ordered, which the
-scheduler's claim queries need, and it is globally unique without coordination,
-which multi-instance schedulers need. The alternatives lose on exactly one
-requirement each; the comparison is below.
+The scheduler's claim queries scan operation records in creation order, and the
+incumbent UUIDv4 IDs do not sort by time, so every query carries a separate
+created-at index and ordering clause. We will use UUIDv7 for operation record
+IDs: it is time-ordered, which the claim queries need, and it is globally
+unique without coordination, which multi-instance schedulers need. The
+alternatives lose on exactly one requirement each; the comparison is below.
 
 ## Requirements
 
@@ -36,6 +38,6 @@ their separate created-at ordering clause and order by ID.
 ## Appendix: alternatives considered
 
 UUIDv4 was the incumbent default; it fails time-ordering, which would keep the
-separate created-at index forever. Snowflake IDs meet both musts but require
-allocating worker IDs to scheduler instances, and the allocator is exactly the
-kind of coordination the second must exists to avoid.
+separate created-at index forever. Snowflake IDs meet both musts but require a
+worker-ID allocator for scheduler instances: exactly the new infrastructure the
+should exists to avoid.
