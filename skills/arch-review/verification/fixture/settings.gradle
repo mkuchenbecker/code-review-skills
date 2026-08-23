@@ -1,0 +1,4 @@
+rootProject.name = 'seedtest'
+include 'core'
+include 'storage'
+include 'api'

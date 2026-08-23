@@ -1,0 +1,95 @@
+{
+  "fixture": "fixture/",
+  "matching": "A must_find entry is matched by a finding whose location is any file in `locations` and whose cited principle is any name in `principles`; `detail` disambiguates when one file carries more than one seed. A must_not_flag entry is violated by any finding targeting the construct described in `detail` at a file in `locations`. An allowed_extras entry excuses a finding at its location/detail from counting against precision.",
+  "must_find": [
+    {
+      "id": "iae-on-user-input",
+      "locations": ["fixture/core/src/main/java/seedtest/core/TableName.java"],
+      "detail": "TableName.parse signals malformed user-reachable input with an undeclared IllegalArgumentException",
+      "principles": ["Defined behavior for bad input", "Enumerable outcomes"]
+    },
+    {
+      "id": "defensive-internal-catch",
+      "locations": ["fixture/core/src/main/java/seedtest/core/SizeEstimator.java"],
+      "detail": "SizeEstimator.estimate wraps the same-module SizeParser call in catch (RuntimeException) and returns a sentinel",
+      "principles": ["Trust interiors"]
+    },
+    {
+      "id": "vendor-exception-through-port",
+      "locations": [
+        "fixture/storage/src/main/java/seedtest/storage/S3TableStore.java",
+        "fixture/core/src/main/java/seedtest/core/TableStore.java"
+      ],
+      "detail": "vendor S3Exception (and decode failures) escape raw through the core-owned TableStore interface",
+      "principles": ["Owned vocabulary", "Enumerable outcomes", "Failures flow low to high, translated once per boundary"]
+    },
+    {
+      "id": "shared-error-codes",
+      "locations": [
+        "fixture/core/src/main/java/seedtest/core/ErrorCodes.java",
+        "fixture/api/src/main/java/seedtest/api/RequestHandler.java"
+      ],
+      "detail": "ErrorCodes is a shared error-code type crossing module boundaries",
+      "principles": ["No shared types across boundaries", "Thin, total protocol surfaces", "Failures flow low to high, translated once per boundary"]
+    },
+    {
+      "id": "io-in-stream-lambda",
+      "locations": ["fixture/core/src/main/java/seedtest/core/SizeEstimator.java"],
+      "detail": "SizeEstimator.readManifests performs file IO inside a stream lambda, wrapping IOException to get through map()",
+      "principles": ["Narrow contracts, one seam", "Failures at boundaries only"]
+    },
+    {
+      "id": "timeout-as-absence",
+      "locations": ["fixture/storage/src/main/java/seedtest/storage/S3TableStore.java"],
+      "detail": "S3TableStore.load converts S3TimeoutException into Optional.empty(), surfacing an infrastructure failure as the domain outcome 'absent'",
+      "principles": ["Dependency failure is its own category"]
+    }
+  ],
+  "must_not_flag": [
+    {
+      "id": "dto-duplication",
+      "locations": [
+        "fixture/api/src/main/java/seedtest/api/TableDto.java",
+        "fixture/api/src/main/java/seedtest/api/DtoMapper.java"
+      ],
+      "detail": "the TableDto/Table near-duplication and its mapper must not draw a consolidation recommendation"
+    },
+    {
+      "id": "entry-point-catch",
+      "locations": ["fixture/api/src/main/java/seedtest/api/RequestHandler.java"],
+      "detail": "the catch (Exception) in RequestHandler.handle must not be flagged as an overly broad catch; it is a genuine entry point (findings about what the handler renders are separate and allowed)"
+    },
+    {
+      "id": "nfe-parse-seam",
+      "locations": ["fixture/api/src/main/java/seedtest/api/RequestHandler.java"],
+      "detail": "the NumberFormatException catch in parseLimit is a correct JDK parse seam and must not be flagged"
+    },
+    {
+      "id": "vocabulary-conformance",
+      "locations": ["*"],
+      "detail": "no finding may demand that an error surface conform to the triage vocabulary"
+    }
+  ],
+  "allowed_extras": [
+    {
+      "id": "invalid-input-as-conflict",
+      "locations": ["fixture/api/src/main/java/seedtest/api/RequestHandler.java"],
+      "detail": "an unparseable limit is rendered with the CONFLICT error code, erasing the invalid-input distinction"
+    },
+    {
+      "id": "blanket-storage-down-rendering",
+      "locations": ["fixture/api/src/main/java/seedtest/api/RequestHandler.java"],
+      "detail": "the entry-point catch renders every unmapped failure as STORAGE_DOWN, asserting a specific cause it does not know"
+    },
+    {
+      "id": "tostring-only-logging",
+      "locations": ["fixture/api/src/main/java/seedtest/api/RequestHandler.java"],
+      "detail": "the failure log records only the exception's toString and no identifying request context"
+    },
+    {
+      "id": "blob-decode-parse",
+      "locations": ["fixture/storage/src/main/java/seedtest/storage/S3TableStore.java"],
+      "detail": "decode's Long.parseLong lets a corrupt blob surface as NumberFormatException; often reported as part of vendor-exception-through-port"
+    }
+  ]
+}
