@@ -46,8 +46,8 @@ of review.
 
 ## Procedure
 
-The review is multiple passes over the document, not one sweep. Each pass is a
-separate, complete read hunting one layer, and every pass has both rule sets in
+The review is multiple passes over the document. Each pass is a separate,
+complete read hunting one layer, and every pass has both rule sets in
 context: the structure pass needs the sentence catalog to recognize that a pile
 of sentence-level tells is evidence for a structural finding, and the sentence
 pass needs the structure rules to report a tell at its structural cause instead
