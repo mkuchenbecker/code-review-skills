@@ -1,7 +1,7 @@
 # Test types
 
-The catalog both modes choose from. Reach for a type when its trigger holds;
-a demanded test always names its type. The middle columns decide; the last
+A catalog of test types. Reach for a type when its trigger holds; a demanded
+or planned test names the type it is. The middle columns decide; the last
 says what a failure of that test means, which is what the responder reads.
 
 | Type | Reach for it when | Claim source; level | A failure means |

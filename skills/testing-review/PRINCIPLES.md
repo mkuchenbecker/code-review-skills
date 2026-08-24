@@ -4,8 +4,8 @@ Testing is falsification. A test is a question that can prove a claim wrong; a
 suite is worth the claims it can falsify; findings are the product, and green
 is the report that old answers still hold. Every principle below derives from
 taking that seriously. Each is stated with its reason; findings cite
-principles by name. The principles are language-agnostic; concrete examples
-are Java and Scala.
+principles by name. The principles are language-agnostic; the examples that
+name a language name Java.
 
 ## 0. Two maps before any question
 
@@ -165,5 +165,7 @@ authored once. Every step asserts a delta against observed pre-state. Each
 case owns a fresh table and drops it. Format is a per-case parameter because
 format-independence is a hypothesis the suite verifies rather than assumes,
 and the crossing doubles as a differential oracle. Known bugs are tagged
-skips with reasons. The runner fails on zero cases. A suite shaped like this
-produced its repository's most valuable findings while staying green.
+skips with reasons. The runner fails on zero cases. The shape is what makes
+the suite an instrument: one authored operation asks a question of every
+substrate, no case can pass without having run, and a crossed axis answers
+its own independence claim.

@@ -17,6 +17,8 @@ import java.util.Optional;
  *   supported currency.
  * - Amounts of a trillion units or more are malformed and return
  *   Optional.empty().
+ * - raw must not be null. Passing null is a programmer error, not malformed
+ *   input, and fails immediately.
  */
 public final class PriceParser {
 
@@ -29,6 +31,7 @@ public final class PriceParser {
   }
 
   public Optional<Price> parse(String raw) {
+    java.util.Objects.requireNonNull(raw, "raw");
     String[] parts = raw.split(":", -1);
     if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) {
       return Optional.empty();

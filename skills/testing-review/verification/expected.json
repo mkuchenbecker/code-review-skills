@@ -1,9 +1,8 @@
 {
   "fixture": "fixture/",
-  "matching": "A must_find entry is matched by a finding in any of the entry's locations citing one of the entry's principles (or an equivalent decision, per detail). A must_not_flag entry is violated by any finding targeting the construct its detail describes. An allowed_extras entry excuses a finding at its locations from counting against precision. The report must additionally satisfy report_requirements.",
+  "matching": "A must_find entry is matched by a finding in any of the entry's locations citing one of the entry's principles, with detail disambiguating. A must_not_flag entry is violated by a finding that makes the demand its detail forbids. An allowed_extras entry excuses a finding only when the finding is at one of the entry's locations AND reports what the entry's detail describes; a finding at a listed location reporting something else counts against precision. The report must also satisfy report_requirements.",
   "report_requirements": [
-    "The report contains the SHOULD/DOES map for PriceParser: claims and partitions from the documented contract, each row showing whether a test was found.",
-    "The map (or the gap findings) identifies the unknown-currency and negative-amount partitions as reachable partitions with no test through them."
+    "The report contains the SHOULD/DOES map for PriceParser: one row per claim and reachable partition drawn from the documented contract, each row showing whether a test was found."
   ],
   "must_find": [
     {
@@ -58,7 +57,7 @@
     },
     {
       "id": "sleep-retry-flake",
-      "detail": "parseIsFastEnough retries a timing assertion in a sleep loop and passes unconditionally on exhaustion; a flake swallowed instead of investigated, and the final assertTrue(true) cannot fail",
+      "detail": "parseIsFastEnough loops with a sleep over an elapsed-time if condition and asserts assertTrue(true) on every path, so no input can make it fail; a flake swallowed by retry instead of investigated",
       "principles": [
         "The instrument cannot lie",
         "4"
@@ -85,7 +84,9 @@
       "detail": "parseLowercaseCurrencySupported asserts lowercase codes parse, but the documented codes are exactly USD, EUR, GBP; the test asserts behavior nothing defines while presenting as a contract test",
       "principles": [
         "Claims before tests",
-        "1"
+        "Fakes answer for the wrong system",
+        "1",
+        "5"
       ],
       "locations": [
         "fixture/src/test/java/fixture/parse/PriceParserTest.java"
@@ -126,7 +127,7 @@
     },
     {
       "id": "mock-where-real-was-trivial",
-      "detail": "SupportedCurrencies is mocked throughout although a real three-line implementation exists to embed; a genuine fake-fidelity observation",
+      "detail": "SupportedCurrencies is mocked throughout although FixedCurrencies, the real implementation, sits beside it in the fixture and is embeddable; a genuine fake-fidelity observation",
       "locations": [
         "fixture/src/test/java/fixture/parse/PriceParserTest.java",
         "fixture/src/main/java/fixture/parse/PriceParser.java"
@@ -162,6 +163,22 @@
       "locations": [
         "fixture/src/test/java/fixture/parse/PriceParserTest.java",
         "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "null-precondition-untested",
+      "detail": "the documented non-null precondition on parse has no test; a genuine gap",
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "undefined-io-channel",
+      "detail": "observations that RetryingFetcher's generic IOException path is undefined by its contract, or that it may report an unknown outcome as a known failure; the pin records this deliberately and must not be demanded to become a contract",
+      "locations": [
+        "fixture/src/main/java/fixture/fetch/RetryingFetcher.java",
+        "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java"
       ]
     }
   ]
