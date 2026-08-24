@@ -11,6 +11,7 @@ below) but never on its consumers, so each can be installed and invoked on its o
 |---|---|
 | [`arch-review`](skills/arch-review/SKILL.md) | Decomposition: module topology, interface contracts, ownership of decisions, and error design. Language-agnostic principles with Java examples. Findings are diagnosed at the structural cause (a boundary, a contract, a seam), not the surface pattern. |
 | [`writing-review`](skills/writing-review/SKILL.md) | Prose changed in a diff: documentation, design docs, comments, commit messages, PR descriptions. Judges document structure first and sentences second, against the external writing reference; design documents are additionally judged against a prescribed structure. |
+| [`testing-review`](skills/testing-review/SKILL.md) | Tests, and the tested-ness of code. Two modes: evaluate reviews a change's tests and ends in a verdict with named actions; write plans the tests for a change. Both derive the tests that should exist from the contract and the control flow, find the ones that do, and diff the sets. |
 
 ## Writing
 

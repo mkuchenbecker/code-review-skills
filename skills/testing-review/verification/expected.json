@@ -1,0 +1,168 @@
+{
+  "fixture": "fixture/",
+  "matching": "A must_find entry is matched by a finding in any of the entry's locations citing one of the entry's principles (or an equivalent decision, per detail). A must_not_flag entry is violated by any finding targeting the construct its detail describes. An allowed_extras entry excuses a finding at its locations from counting against precision. The report must additionally satisfy report_requirements.",
+  "report_requirements": [
+    "The report contains the SHOULD/DOES map for PriceParser: claims and partitions from the documented contract, each row showing whether a test was found.",
+    "The map (or the gap findings) identifies the unknown-currency and negative-amount partitions as reachable partitions with no test through them."
+  ],
+  "must_find": [
+    {
+      "id": "gap-unknown-currency",
+      "detail": "the documented outcome 'unknown currency code returns empty' has no test; the branch is reachable and defined",
+      "principles": [
+        "Two maps before any question",
+        "Claims before tests",
+        "0",
+        "1"
+      ],
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "gap-negative-amount",
+      "detail": "the documented outcome 'negative amount returns empty' has no test; the branch is reachable and defined",
+      "principles": [
+        "Two maps before any question",
+        "Claims before tests",
+        "0",
+        "1"
+      ],
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "assertion-free-coverage",
+      "detail": "parseDoesNotThrow calls the parser three times and asserts nothing; coverage without a question",
+      "principles": [
+        "The instrument cannot lie",
+        "4"
+      ],
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java"
+      ]
+    },
+    {
+      "id": "order-dependent-pair",
+      "detail": "cachedPriceIsUsd reads the static CACHE seeded by parseValidUsd; the tests are order-dependent through a shared mutable fixture",
+      "principles": [
+        "The instrument cannot lie",
+        "4"
+      ],
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java"
+      ]
+    },
+    {
+      "id": "sleep-retry-flake",
+      "detail": "parseIsFastEnough retries a timing assertion in a sleep loop and passes unconditionally on exhaustion; a flake swallowed instead of investigated, and the final assertTrue(true) cannot fail",
+      "principles": [
+        "The instrument cannot lie",
+        "4"
+      ],
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java"
+      ]
+    },
+    {
+      "id": "interaction-verification",
+      "detail": "parseUsesCurrencyService stubs the currency service and then verifies the stubbed call happened, where the observable outcome (the parse result) was available; it asserts on its own mock",
+      "principles": [
+        "Fakes answer for the wrong system",
+        "Claims before tests",
+        "5",
+        "1"
+      ],
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java"
+      ]
+    },
+    {
+      "id": "pin-posing-as-contract",
+      "detail": "parseLowercaseCurrencySupported asserts lowercase codes parse, but the documented codes are exactly USD, EUR, GBP; the test asserts behavior nothing defines while presenting as a contract test",
+      "principles": [
+        "Claims before tests",
+        "1"
+      ],
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java"
+      ]
+    }
+  ],
+  "must_not_flag": [
+    {
+      "id": "fault-injection-mocks",
+      "detail": "the mocked transport throwing SocketTimeoutException and ConnectException is legitimate fault injection of a documented failure channel, including its times() retry-count assertions, which test the documented retry policy",
+      "locations": [
+        "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java"
+      ]
+    },
+    {
+      "id": "labeled-pin",
+      "detail": "pinNullUrlCurrentlyReportsFailed is labeled as a pin and must not be demanded to become a contract",
+      "locations": [
+        "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java"
+      ]
+    },
+    {
+      "id": "load-bearing-duplication",
+      "detail": "the two fault-injection tests repeat their arrange blocks; consolidating them must not be recommended",
+      "locations": [
+        "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java"
+      ]
+    }
+  ],
+  "allowed_extras": [
+    {
+      "id": "rounding-claim-unattacked",
+      "detail": "the documented rounding rule and its cross-currency independence claim have no property or differential test; a genuine gap beyond the two mandatory ones",
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "mock-where-real-was-trivial",
+      "detail": "SupportedCurrencies is mocked throughout although a real three-line implementation exists to embed; a genuine fake-fidelity observation",
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "wrong-shape-absolute-assertions",
+      "detail": "minor instrument observations about the remaining tests, for example double-case tests or example oracles where a property was available",
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "ok-path-untested",
+      "detail": "the successful-fetch OK outcome has no test; a genuine gap in the control's coverage, distinct from its must_not_flag constructs",
+      "locations": [
+        "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java",
+        "fixture/src/main/java/fixture/fetch/RetryingFetcher.java"
+      ]
+    },
+    {
+      "id": "overflow-partition-untested",
+      "detail": "the documented trillion-unit bound has no test; a genuine gap",
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    },
+    {
+      "id": "amount-grammar-observations",
+      "detail": "observations that the accepted numeric grammar (for example scientific notation) is wider or narrower than the contract's example suggests",
+      "locations": [
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/src/main/java/fixture/parse/PriceParser.java"
+      ]
+    }
+  ]
+}
