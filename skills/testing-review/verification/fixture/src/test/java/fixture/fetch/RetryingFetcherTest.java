@@ -35,12 +35,14 @@ class RetryingFetcherTest {
     verify(transport, times(3)).get("u");
   }
 
-  // PIN: no document defines what a null URL does. Recorded so a change is
-  // noticed; a failure here means behavior changed, not that a promise broke.
+  // PIN: the contract defines the ConnectException and SocketTimeoutException
+  // channels and says nothing about any other IOException. This records what
+  // the code does today, so a change is noticed; a failure here means behavior
+  // changed, not that a promise broke.
   @Test
-  void pinNullUrlCurrentlyReportsFailed() throws Exception {
+  void pinOtherIoExceptionCurrentlyReportsFailed() throws Exception {
     RetryingFetcher.Transport transport = mock(RetryingFetcher.Transport.class);
-    when(transport.get(null)).thenThrow(new java.io.IOException("null url"));
-    assertEquals(RetryingFetcher.Result.FAILED, new RetryingFetcher(transport).fetch(null));
+    when(transport.get("u")).thenThrow(new java.io.IOException("disk full"));
+    assertEquals(RetryingFetcher.Result.FAILED, new RetryingFetcher(transport).fetch("u"));
   }
 }
