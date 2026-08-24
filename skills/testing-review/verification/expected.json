@@ -130,7 +130,8 @@
       "detail": "SupportedCurrencies is mocked throughout although FixedCurrencies, the real implementation, sits beside it in the fixture and is embeddable; a genuine fake-fidelity observation",
       "locations": [
         "fixture/src/test/java/fixture/parse/PriceParserTest.java",
-        "fixture/src/main/java/fixture/parse/PriceParser.java"
+        "fixture/src/main/java/fixture/parse/PriceParser.java",
+        "fixture/src/main/java/fixture/parse/FixedCurrencies.java"
       ]
     },
     {
@@ -179,6 +180,15 @@
       "locations": [
         "fixture/src/main/java/fixture/fetch/RetryingFetcher.java",
         "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java"
+      ]
+    },
+    {
+      "id": "fixed-currencies-untested",
+      "detail": "FixedCurrencies carries the documented 'exactly USD, EUR, GBP' claim and has no test of its own; a genuine gap, including observations that the fixture has no build file to run any of these tests with",
+      "locations": [
+        "fixture/src/main/java/fixture/parse/FixedCurrencies.java",
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
+        "fixture/"
       ]
     }
   ]

@@ -13,8 +13,8 @@ from a closed set, and every finding carries the action it demands.
 
 ## Target
 
-Any codebase. The principles are language-agnostic; where one needs something
-concrete, the examples are Java and Scala. The unit of work is a body of code
+Any codebase. The principles are language-agnostic, and the verification
+fixture that exercises them is Java. The unit of work is a body of code
 however selected: the current diff (the default), a PR number, a branch, or a
 module path.
 
@@ -66,7 +66,11 @@ lies) built on an explicit two-set diff.
    blocks regardless of coverage because a lying instrument voids every
    green. The report's centerpiece is the map itself, one row per claim and
    partition: the SHOULD entry, the DOES entry found, and the verdict.
-   Findings rank by the defect that would ship uncaught.
+   Findings rank by the defect that would ship uncaught. Write the report per
+   the writing rules at
+   https://github.com/mkuchenbecker/humanizer/blob/main/STRUCTURE.md; if that
+   reference is unreachable, proceed without it, since it is a style
+   dependency and not a correctness one.
 
 ## Write mode
 

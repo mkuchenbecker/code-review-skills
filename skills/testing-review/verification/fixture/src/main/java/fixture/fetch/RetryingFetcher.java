@@ -13,9 +13,8 @@ import java.net.SocketTimeoutException;
  * - A SocketTimeoutException after the request was sent means the outcome is
  *   unknown; the fetcher must NOT retry and reports STATE_UNKNOWN.
  * - A successful fetch reports OK.
- * - Any other IOException is outside this contract. The fetcher reports
- *   FAILED, which may report a genuinely unknown outcome as a known failure;
- *   defining this case is open.
+ * - Any other IOException is outside this contract: what the fetcher does
+ *   with it is undefined, and defining it is open.
  */
 public final class RetryingFetcher {
 
