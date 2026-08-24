@@ -96,7 +96,7 @@
   "must_not_flag": [
     {
       "id": "fault-injection-mocks",
-      "detail": "the mocked transport throwing SocketTimeoutException and ConnectException is legitimate fault injection of a documented failure channel, including its times() retry-count assertions, which test the documented retry policy",
+      "detail": "the mocked transport throwing SocketTimeoutException and ConnectException is legitimate fault injection of a documented failure channel, and its times() assertions test the documented retry policy; neither the mocks nor the interaction assertions may be demanded to be replaced by an outcome-only test or by a real transport",
       "locations": [
         "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java"
       ]
@@ -127,7 +127,7 @@
     },
     {
       "id": "mock-where-real-was-trivial",
-      "detail": "SupportedCurrencies is mocked throughout although FixedCurrencies, the real implementation, sits beside it in the fixture and is embeddable; a genuine fake-fidelity observation",
+      "detail": "principle-5 observations about the currency stub: FixedCurrencies, the real implementation, sits beside it in the fixture and is embeddable, and the shared stub accepts every code, a state the documented service cannot reach, so parseValidUsd proves nothing about USD being supported",
       "locations": [
         "fixture/src/test/java/fixture/parse/PriceParserTest.java",
         "fixture/src/main/java/fixture/parse/PriceParser.java",
@@ -184,11 +184,10 @@
     },
     {
       "id": "fixed-currencies-untested",
-      "detail": "FixedCurrencies carries the documented 'exactly USD, EUR, GBP' claim and has no test of its own; a genuine gap, including observations that the fixture has no build file to run any of these tests with",
+      "detail": "FixedCurrencies carries the documented 'exactly USD, EUR, GBP' claim and has no test of its own; a genuine gap",
       "locations": [
         "fixture/src/main/java/fixture/parse/FixedCurrencies.java",
-        "fixture/src/test/java/fixture/parse/PriceParserTest.java",
-        "fixture/"
+        "fixture/src/test/java/fixture/parse/PriceParserTest.java"
       ]
     }
   ]

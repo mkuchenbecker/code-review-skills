@@ -23,7 +23,8 @@ withholding `expected.json` and this file:
 
 > Follow the skill at skills/testing-review/SKILL.md in evaluate mode. Review
 > target: the module at skills/testing-review/verification/fixture/, all newly
-> added in the change under review. Write the report, in the skill's findings
+> added in the change under review. Review it as source; it is not built, so
+> its build tooling is out of scope. Write the report, in the skill's findings
 > contract and including the SHOULD/DOES map, to a file.
 
 The reviewer must not see `expected.json` or this file. A review that knows

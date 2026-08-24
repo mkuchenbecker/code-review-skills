@@ -9,6 +9,7 @@ public final class FixedCurrencies implements SupportedCurrencies {
 
   @Override
   public boolean isSupported(String code) {
+    java.util.Objects.requireNonNull(code, "code");
     return CODES.contains(code);
   }
 }

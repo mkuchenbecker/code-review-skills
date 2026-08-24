@@ -35,10 +35,9 @@ class RetryingFetcherTest {
     verify(transport, times(3)).get("u");
   }
 
-  // PIN: the contract defines the ConnectException and SocketTimeoutException
-  // channels and says nothing about any other IOException. This records what
-  // the code does today, so a change is noticed; a failure here means behavior
-  // changed, not that a promise broke.
+  // PIN: the contract leaves any other IOException undefined. This records
+  // what the code does today, so a change is noticed; a failure here means
+  // behavior changed, not that a promise broke.
   @Test
   void pinOtherIoExceptionCurrentlyReportsFailed() throws Exception {
     RetryingFetcher.Transport transport = mock(RetryingFetcher.Transport.class);
