@@ -96,7 +96,7 @@
   "must_not_flag": [
     {
       "id": "fault-injection-mocks",
-      "detail": "the mocked transport throwing SocketTimeoutException and ConnectException is legitimate fault injection of a documented failure channel, and its times() assertions test the documented retry policy; neither the mocks nor the interaction assertions may be demanded to be replaced by an outcome-only test or by a real transport",
+      "detail": "the mocked transport throwing SocketTimeoutException and ConnectException is legitimate fault injection of a documented failure channel, and its times() assertions test the documented retry policy; any demand to remove, replace, relocate, or weaken them violates this entry",
       "locations": [
         "fixture/src/test/java/fixture/fetch/RetryingFetcherTest.java"
       ]
@@ -184,9 +184,10 @@
     },
     {
       "id": "fixed-currencies-untested",
-      "detail": "FixedCurrencies carries the documented 'exactly USD, EUR, GBP' claim and has no test of its own; a genuine gap",
+      "detail": "the currency port's documented claims have no tests of their own: the code set is exactly USD, EUR, GBP, and code must not be null; a genuine gap, itemized per claim or reported as one",
       "locations": [
         "fixture/src/main/java/fixture/parse/FixedCurrencies.java",
+        "fixture/src/main/java/fixture/parse/SupportedCurrencies.java",
         "fixture/src/test/java/fixture/parse/PriceParserTest.java"
       ]
     }

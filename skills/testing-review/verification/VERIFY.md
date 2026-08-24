@@ -39,3 +39,11 @@ honest.
 | Recall | Every `must_find` entry matched by a finding in its file citing one of the entry's principles, with `detail` disambiguating; `report_requirements` also hold | All entries matched and requirements met |
 | Restraint | No finding makes the demand a `must_not_flag` entry's `detail` forbids | Zero violations |
 | Precision | A finding counts against precision unless it matches a `must_find` entry, or sits at an `allowed_extras` location AND reports what that entry's `detail` describes | Zero unmatched findings |
+
+## Changing the fixture
+
+A fixture edit that adds or changes documented behavior adds a claim a blind
+reviewer will look for a test of. Before committing such an edit, ask one
+question per documented claim in the fixture: which entry covers the absence
+of a test for it? A claim no entry covers makes a correct review fail
+Precision. Run this when the fixture changes, not when a review comes back.
