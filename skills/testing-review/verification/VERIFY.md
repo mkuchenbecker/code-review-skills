@@ -8,8 +8,10 @@ violation is a skill defect. A deliberate change to the skill updates
 
 All paths in this file are relative to the repository root.
 `skills/testing-review/verification/fixture/` holds a small Java module with
-two documented contracts and their two test files: one seeded with defects,
-one a restraint control containing constructs the skill must leave alone.
+three documented contracts: a parser and a fetcher, each with a test file, and
+a currency port with none. Of the two test files, one is seeded with defects
+and one is a restraint control containing constructs the skill must leave
+alone.
 `skills/testing-review/verification/expected.json` is the answer key.
 
 ## Procedure
@@ -36,7 +38,7 @@ honest.
 
 | Gate | Rule | Pass |
 |---|---|---|
-| Recall | Every `must_find` entry matched by a finding in its file citing one of the entry's principles, with `detail` disambiguating; `report_requirements` also hold | All entries matched and requirements met |
+| Recall | Every `must_find` entry matched by a finding at any of the entry's locations citing one of the entry's principles, with `detail` disambiguating; `report_requirements` also hold | All entries matched and requirements met |
 | Restraint | No finding makes the demand a `must_not_flag` entry's `detail` forbids | Zero violations |
 | Precision | A finding counts against precision unless it matches a `must_find` entry, or sits at an `allowed_extras` location AND reports what that entry's `detail` describes | Zero unmatched findings |
 
