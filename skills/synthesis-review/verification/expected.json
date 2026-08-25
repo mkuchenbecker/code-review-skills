@@ -1,0 +1,97 @@
+{
+  "fixture": "fixture/",
+  "matching": "A must_produce entry is matched by exactly one comment in the output's comment set at one of the entry's locations, carrying every reviewer the entry lists in its category tag, a tier from the entry's tiers list, and content the entry's detail describes. A must_not entry is violated by any output the entry's detail forbids. A log_requirement is met by an adjudication-log entry whose content the requirement describes. An allowed_extras entry excuses a comment only when the comment is at one of the entry's locations AND says what the entry's detail describes; any other comment matching no must_produce entry counts against precision. report_requirements must all hold.",
+  "report_requirements": [
+    "The output contains, in order: a review body, a numbered comment set, and an adjudication log.",
+    "The review body contains an attribution line naming the criteria the review was generated from.",
+    "Every comment in the comment set begins with a [category][tier] prefix whose tier is blocking or follow-up.",
+    "The comment set is ordered most severe first, and its first comment is the starvation defect (must_produce id starvation)."
+  ],
+  "must_produce": [
+    {
+      "id": "starvation",
+      "detail": "the unconditional advance of lastRefillNanos on line 41 starves any caller polling faster than once per second after the initial burst, silently and permanently, contradicting the documented refill contract; the comment states the mechanism and a fix confined to the refill logic",
+      "reviewers": ["testing-review"],
+      "tiers": ["blocking"],
+      "locations": ["target/RateLimiter.java lines 40-42"]
+    },
+    {
+      "id": "thread-safety-merged",
+      "detail": "one comment, not two, for the documented thread-safety claim over unsynchronized mutable state, crediting both arch-review and testing-review; it demands either real synchronization plus an attacking test or deletion of the claim",
+      "reviewers": ["arch-review", "testing-review"],
+      "tiers": ["blocking"],
+      "locations": ["target/RateLimiter.java lines 8-9", "target/RateLimiter.java lines 24-25", "target/RateLimiter.java lines 38-51"]
+    },
+    {
+      "id": "no-throw-adjudicated",
+      "detail": "one comment for the never-throws-and-clamps sentence contradicted by the constructor's IllegalArgumentException and by refillPerSecond being unvalidated; the ruling is either fix-the-code-to-clamp or fix-the-doc-to-state-the-throw, and the adjudication log carries both positions",
+      "reviewers": ["arch-review", "writing-review"],
+      "tiers": ["blocking"],
+      "locations": ["target/RateLimiter.java lines 9-10", "target/RateLimiter.java lines 28-36"]
+    },
+    {
+      "id": "example-method",
+      "detail": "the javadoc example calls acquirePermit(), a method that does not exist; the fix names tryAcquire()",
+      "reviewers": ["writing-review"],
+      "tiers": ["blocking", "follow-up"],
+      "locations": ["target/RateLimiter.java line 16"]
+    },
+    {
+      "id": "decompose-followup",
+      "detail": "the clock-seam/strategy decomposition demand survives as follow-up, never blocking; it may carry a smallest-step note but must not be dropped",
+      "reviewers": ["arch-review"],
+      "tiers": ["follow-up"],
+      "locations": ["target/RateLimiter.java lines 20-52"]
+    },
+    {
+      "id": "field-grouping-nit",
+      "detail": "the field-grouping readability nit survives as follow-up",
+      "reviewers": ["arch-review"],
+      "tiers": ["follow-up"],
+      "locations": ["target/RateLimiter.java lines 22-25"]
+    },
+    {
+      "id": "javadoc-order-nit",
+      "detail": "the paragraph-ordering nit (guarantees before mechanics) survives as follow-up, either as its own comment or folded into a comment at overlapping lines with writing-review credited",
+      "reviewers": ["writing-review"],
+      "tiers": ["follow-up"],
+      "locations": ["target/RateLimiter.java lines 6-10", "target/RateLimiter.java lines 9-10"]
+    }
+  ],
+  "must_not": [
+    {
+      "id": "unverified-finding-posted",
+      "detail": "no comment derives from the zero-capacity finding (testing report T3): its quoted line 30 is the constructor throw, not a return, and a zero-capacity limiter cannot be constructed because the constructor throws first; posting it in any form violates this entry"
+    },
+    {
+      "id": "rewrite-as-blocking",
+      "detail": "no blocking comment demands the decomposition/restructuring of the class; a blocking tier on the clock-seam/strategy demand violates this entry"
+    },
+    {
+      "id": "nit-inflation",
+      "detail": "neither the field-grouping nit nor the paragraph-ordering nit carries a blocking tier"
+    },
+    {
+      "id": "silent-drop",
+      "detail": "no input finding is absent from both the comment set and the adjudication log"
+    }
+  ],
+  "log_requirements": [
+    "The zero-capacity finding (testing report T3) appears as returned, with the verification failure stated: the quote does not match line 30 and/or the claim is impossible because the constructor throws for capacity <= 0.",
+    "The no-throw disagreement appears with both positions stated (arch-review: make the code honor the documented clamping; writing-review: correct the document to state the throw) and a deciding reason for the ruling.",
+    "The thread-safety merge appears, naming both source findings.",
+    "The posture facts used in tiering are stated: no callers outside tests, and the limiter.enabled flag defaulting to false."
+  ],
+  "allowed_extras": [
+    {
+      "id": "refill-rate-unvalidated-split",
+      "detail": "a separate comment isolating the unvalidated refillPerSecond half of the no-throw finding (a zero or negative rate is accepted and never refills), instead of folding it into the no-throw comment",
+      "locations": ["target/RateLimiter.java lines 28-36", "target/RateLimiter.java line 33"]
+    },
+    {
+      "id": "unreviewed-dimensions-note",
+      "detail": "a note in the review body naming dimensions no input report covered (for example performance or security), presented as unreviewed rather than as findings",
+      "locations": ["review body"]
+    }
+  ]
+}
