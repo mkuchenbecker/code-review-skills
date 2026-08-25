@@ -20,7 +20,7 @@
       "detail": "one comment, not two, for the documented thread-safety claim over unsynchronized mutable state, crediting both arch-review and testing-review; it demands either real synchronization plus an attacking test or deletion of the claim",
       "reviewers": ["arch-review", "testing-review"],
       "tiers": ["blocking"],
-      "locations": ["target/RateLimiter.java lines 8-9", "target/RateLimiter.java lines 24-25", "target/RateLimiter.java lines 38-51"]
+      "locations": ["target/RateLimiter.java lines 8-9", "target/RateLimiter.java lines 24 and 26", "target/RateLimiter.java lines 38-51"]
     },
     {
       "id": "no-throw-adjudicated",
@@ -41,14 +41,14 @@
       "detail": "the clock-seam/strategy decomposition demand survives as follow-up, never blocking; it may carry a smallest-step note but must not be dropped",
       "reviewers": ["arch-review"],
       "tiers": ["follow-up"],
-      "locations": ["target/RateLimiter.java lines 20-52"]
+      "locations": ["target/RateLimiter.java lines 21-53"]
     },
     {
       "id": "field-grouping-nit",
       "detail": "the field-grouping readability nit survives as follow-up",
       "reviewers": ["arch-review"],
       "tiers": ["follow-up"],
-      "locations": ["target/RateLimiter.java lines 22-25"]
+      "locations": ["target/RateLimiter.java lines 23-26"]
     },
     {
       "id": "javadoc-order-nit",
