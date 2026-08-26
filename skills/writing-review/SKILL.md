@@ -40,7 +40,7 @@ state the present and how to verify it, with production history (run counts,
 iteration numbers, process narration) left to the commit log and other ledgers.
 
 When the reviewed prose is a design document, also judge it against
-[DESIGN-DOCS.md](DESIGN-DOCS.md) in this directory.
+[DESIGN-DOCS.md](https://github.com/mkuchenbecker/code-review-skills/blob/main/skills/writing-review/DESIGN-DOCS.md) in this directory.
 
 ## Target
 
@@ -58,7 +58,7 @@ so the table lists only how the structure rules narrow.
 
 | Genre | Structure rules that bind | Exempt |
 |---|---|---|
-| Documentation files and design docs | All structure rules; design docs are additionally judged against [DESIGN-DOCS.md](DESIGN-DOCS.md) | Nothing |
+| Documentation files and design docs | All structure rules; design docs are additionally judged against [DESIGN-DOCS.md](https://github.com/mkuchenbecker/code-review-skills/blob/main/skills/writing-review/DESIGN-DOCS.md) | Nothing |
 | PR descriptions | Conclusion on top; stands on its own; the caveat test; tables where items share fields | The layered skeleton: a PR description is a single layer |
 | Commit messages | Conclusion on top (the subject line is the conclusion); stands on its own; the caveat test | Tables and the layered skeleton |
 | Comments and doc-comments | Stands on its own; the caveat test; complete sentences | Document-scale rules: conclusion placement, tables, layering |
@@ -77,20 +77,25 @@ of attention; a single read does neither well.
 1. Identify the prose in the target and what genre each piece is: a design doc,
    a README, API documentation, a comment, a commit message, a skill file. The
    Genres table above states which rules bind each.
-2. Fetch the criteria (see above); fall back to the condensed copy if
+2. Identify the governing specifications, explicit requirements, approved
+   contracts, and reader obligations that the prose must satisfy. Existing prose,
+   house style, and repeated terminology are evidence about audience expectations,
+   not proof that the same wording or structure is correct.
+3. Fetch the criteria (see above); fall back to the condensed copy if
    unreachable, and say so. Both rule sets stay in context for every pass.
-3. **Structure pass.** Read the whole document for shape only: conclusion
+4. **Structure pass.** Read the whole document for shape only: conclusion
    placement, list/table choices, caveat inventory, whether it stands on its
    own, layering, and the genre structure where one applies.
-4. **Sentence pass.** Read the whole document again for lines only, against the
+5. **Sentence pass.** Read the whole document again for lines only, against the
    pattern catalog.
-5. **Merge.** Deduplicate: a sentence-level finding whose cause is a structural
+6. **Merge.** Deduplicate: a sentence-level finding whose cause is a structural
    finding folds into it as evidence, not a separate entry. For structural
    findings, name the failure scenario in reader terms: who reads this, where
    they stop, what they miss or misjudge because of the defect.
-6. Report findings in the contract below, ordered most severe first: a
+7. Report findings in the contract below, ordered most severe first: a
    structured chat report by default, or a file when the invocation directs.
-   A report with zero findings states that explicitly.
+   A report with zero findings states that explicitly and includes the disposition
+   ledger.
 
 ## Findings contract
 
@@ -108,11 +113,18 @@ structural finding checkable rather than asserted.
 | confidence | `confirmed`, `probable`, or `speculative` |
 | reviewer | `writing-review` |
 
+The report also includes a disposition ledger for every candidate omission,
+non-goal, style exception, tabled concern, waiver, or accepted-as-conforming
+decision considered during the review. Each entry names the location, proposed
+concern, disposition, evidence, and governing reason. Existing house style,
+current wording, or author preference alone cannot settle the decision.
+
 ## Posture
 
 - Judge the document that exists, for its actual readers. House style and the
-  writer's voice are not defects; the false-positive guardrails in the
-  sentence-pattern catalog apply here too.
+  writer's voice are evidence, not immunity. Preserve them when they satisfy the
+  governing criteria; challenge them when they hide or contradict the contract.
+  The false-positive guardrails in the sentence-pattern catalog still apply.
 - Report everything true, with evidence. A low-confidence finding is reported
   with its confidence marked `probable` or `speculative`, not suppressed.
 - Never rewrite in the report. The finding names the defect and its cause; the

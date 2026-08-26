@@ -32,17 +32,22 @@ review: the same analysis applies, with the diff marking where change is happeni
    - What kind of code each file under review is: domain logic, a boundary
      interface, or a translation layer at an external edge. The same construct can
      be correct in an edge translation layer and a defect in interior logic.
-   - Which modules are allowed to depend on which. The module graph is the ground
-     truth for every dependency-direction judgment. Roles are inferred from
-     structure; nothing is configured.
+   - Which modules currently depend on which. The module graph is evidence about
+     compatibility constraints and blast radius, not proof that the current
+     dependency direction is correct. Governing specifications, explicit
+     requirements, approved contracts, and the principles in this skill decide
+     the intended direction.
 2. **Read the code under review and its callers.** Caller analysis is not optional
    context: it is how contracts are judged (who actually depends on what) and how
    the feasibility of any restructuring is assessed (what a change to this seam
    would pull in).
-3. **Judge against `PRINCIPLES.md`.** Read it in full before reporting. Every
-   finding names a concrete failure scenario: specific inputs or state leading to a
-   specific wrong outcome. A concern that cannot be stated as a failure scenario is
-   not reported.
+3. **Judge against `PRINCIPLES.md` and the governing review bundle.** Read the
+   principles in full before reporting. Apply governing specifications, explicit
+   requirements, and approved contracts before changed code or repository
+   precedent. Every finding names a concrete failure scenario: specific inputs or
+   state leading to a specific wrong outcome. A concern that cannot be stated as a
+   failure scenario enters the disposition ledger with the reason it was not
+   reported.
 4. **Where the code fights its surroundings, classify the impedance mismatch.** When
    a change is awkward, contorting to fit the shape of the code it lands in, the
    surrounding architecture is in scope, not just the lines under review. Go one
@@ -50,7 +55,7 @@ review: the same analysis applies, with the diff marking where change is happeni
    caller analysis to determine what stands between the code and that shape.
 5. **Enumerate options before grading.** For each structural finding, put the real
    options on the table before judging severity:
-   - accept the code as it stands;
+   - leave the changed code as-is only when the governing contract supports it;
    - a small enabling refactor first, after which the change flows: name the
      refactor and what it touches;
    - the larger restructure: name its blast radius from the caller analysis.
@@ -58,8 +63,8 @@ review: the same analysis applies, with the diff marking where change is happeni
    set: a mismatch resolved by a small enabling refactor is actionable now and
    graded on that basis; one requiring a migration is reported with its cost, not
    silently dropped and not graded as if the cheap fix existed.
-6. **Report findings** in the contract below, as a structured chat report, ordered
-   most severe first. Write the report per the writing rules at
+6. **Report findings and dispositions** in the contracts below, as a structured
+   chat report, ordered most severe first. Write the report per the writing rules at
    https://github.com/mkuchenbecker/humanizer/blob/main/STRUCTURE.md. If that
    reference is unreachable, proceed without it; it is a style dependency, not a
    correctness one.
@@ -73,16 +78,22 @@ Each finding carries:
 - **claim**: one sentence stating the defect
 - **failure scenario**: concrete inputs or state leading to a concrete wrong outcome
 - **options**: for structural findings, the enumerated remediation options
-  (as-is / enabling refactor / restructure), each with what it touches per the
-  caller analysis
+  (governing-contract-supported as-is / enabling refactor / restructure), each
+  with what it touches per the caller analysis
 - **severity**: `blocker` | `suggestion` | `nit`, graded after the options exist
 - **confidence**: `confirmed` (verified against the code and its callers) |
   `probable` (consistent with everything read, not fully traced) | `speculative`
   (depends on unverified assumptions)
 - **reviewer**: `arch-review`
 
-A report with zero findings states that explicitly, with a one-line note of what was
-examined.
+The report also carries a disposition ledger. Record each structural concern that
+was explicitly accepted, exempted, waived, tabled, delegated, or classified as
+non-actionable, with its location, proposed claim, disposition, evidence, and
+governing reason. "The current code already does this" and "this matches the module
+graph" are not governing reasons.
+
+A report with zero findings states that explicitly and still includes the
+disposition ledger and a note of what was examined.
 
 ## Posture
 
@@ -91,6 +102,9 @@ examined.
   that is when the review earns its name, by classifying the mismatch, describing
   the ideal shape, and enumerating the path there. "Pre-existing" is context that
   shapes the options and the grade, never grounds for silence.
+- Existing architecture is observed evidence, not authority. A repeated pattern can
+  explain migration cost or compatibility risk, but it cannot make a defective new
+  boundary correct.
 - Report everything true, with evidence, regardless of expected pushback; severity
   and confidence are carried in each finding so consumers can make their own policy
   decisions. A low-confidence finding is reported with its confidence marked low,

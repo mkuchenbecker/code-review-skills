@@ -25,7 +25,7 @@ because they answer different questions and neither substitutes for the other.
 
 | Map | Built from | It decides |
 |---|---|---|
-| Contract inventory | The definitions the change touches: signatures, error contracts, documented behavior, lifecycle definitions | What is claimed, and therefore what tests assert |
+| Contract inventory | Governing specifications, explicit requirements, approved contracts and designs, then the definitions the change touches | What is actually promised, and therefore what tests assert |
 | Control-flow map | The code: branch points, error channels, state transitions, concurrency points, and where paths provably converge | Which cases exist (one per reachable partition), which cells are vacuous (a stated convergence proof), and each case's home level |
 
 One discipline keeps the flow map from corrupting the tests: the flow map
@@ -36,6 +36,12 @@ traverses is either a partition the contract questions missed, or a path the
 contract never needed, meaning dead code or an error branch that should have
 been an assert on an unrepresentable state.
 
+The source order matters. Changed signatures, documentation, tests, and existing
+behavior are proposed or observed behavior. They do not ratify themselves when they
+conflict with a governing specification, explicit requirement, approved contract,
+or reviewer charter. Repository precedent can reveal compatibility constraints, but
+it cannot prove the changed behavior is correct.
+
 ## Evaluate mode
 
 The output is a verdict (ship, ship after named tests, or the instrument
@@ -45,9 +51,9 @@ lies) built on an explicit two-set diff.
    should exist: each gating claim crossed with each reachable partition,
    each row carrying a type from TEST-TYPES.md, a level, and an oracle. A
    claim gates shipping if its falsification would change the ship decision;
-   non-gating claims produce no rows and no findings. The SHOULD set is a
-   concrete table in the report: it is the answer key the rest of the review
-   grades against.
+   non-gating claims produce no findings but remain in the disposition ledger with
+   the reason they do not gate. The SHOULD set is a concrete table in the report:
+   it is the answer key the rest of the review grades against.
 2. **Find the DOES set.** Search the whole suite, not only the diff, for
    tests attacking the touched claims: references to the changed symbols,
    fixtures over the changed surface, case ids in generated matrices. A claim
@@ -73,8 +79,9 @@ lies) built on an explicit two-set diff.
 The output is the SHOULD map with each row marked "write" or "already covered
 by X", plus the open decisions surfaced for a human.
 
-1. **Enumerate the claims** from the definitions, never from the code as
-   written. Only new or altered claims need new questions; a discovered gap
+1. **Enumerate the claims** from the governing sources and approved definitions,
+   never from the implementation as written. Only new or altered claims need new
+   questions; a discovered gap
    in old claims is surfaced separately, not silently absorbed.
 2. **Run the DOES search first**, so no test is authored that already exists.
 3. **Push each claim down the ladder before writing anything.** Stop at the
@@ -124,10 +131,19 @@ and not a correctness one.
 | confidence | `confirmed`, `probable`, or `speculative` |
 | reviewer | `testing-review` |
 
+Both modes also emit a disposition ledger for every candidate claim, partition,
+test concern, or case that is accepted, pruned, exempted, waived, tabled,
+delegated, or classified as non-gating. Each row includes the location or claim id,
+the proposed concern, the disposition, the convergence or contract evidence, and
+the governing reason. Existing tests or existing behavior alone cannot justify a
+non-finding disposition.
+
 ## Posture
 
 - Report everything true, with evidence. A low-confidence finding is reported
   with its confidence marked `probable` or `speculative`, not suppressed.
+- Treat existing tests and implementation patterns as observations. They establish
+  coverage and compatibility facts, not the correctness of the contract they encode.
 - Coverage findings name the missed partition or the dead path, never a
   percentage. No numeric coverage target is used or recommended.
 - Anti-noise commitments (violating any is itself a defective review):

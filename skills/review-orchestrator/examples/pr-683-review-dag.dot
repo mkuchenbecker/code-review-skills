@@ -1,0 +1,90 @@
+digraph PR683Review {
+  rankdir=LR;
+  graph [fontname="Helvetica", bgcolor="white"];
+  node [shape=box, style="rounded", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+
+  grok [label="Grok\nfrozen corpus, governing sources,\nposture, charters"];
+  dependency [shape=note, label="Each branch is sequential\nSME report completes first\nBlind quality gate reviews the report\nSynthesis waits for a passed packet"];
+
+  subgraph cluster_fanout {
+    label="Independent SME branches with dependent blind review";
+    style="rounded,dashed";
+
+    subgraph cluster_pedantic {
+      label="pedantic-linter";
+      pedantic_sme [label="SME review\nline-by-line violations"];
+      pedantic_blind [label="Blind quality gate\nwriting-review + goal/principle audit"];
+      pedantic_sme -> pedantic_blind;
+    }
+
+    subgraph cluster_architecture_iceberg {
+      label="Architecture + Iceberg view semantics";
+      architecture_iceberg_sme [label="SME review\narch-review + Iceberg View Spec"];
+      architecture_iceberg_blind [label="Blind quality gate\nwriting-review + goal/principle audit"];
+      architecture_iceberg_sme -> architecture_iceberg_blind;
+    }
+
+    subgraph cluster_testing {
+      label="testing-review";
+      testing_sme [label="SME review\nclaims, paths, regression proof"];
+      testing_blind [label="Blind quality gate\nwriting-review + goal/principle audit"];
+      testing_sme -> testing_blind;
+    }
+
+    subgraph cluster_writing {
+      label="writing-review";
+      writing_sme [label="SME review\nSQL records, API docs, comments"];
+      writing_blind [label="Blind quality gate\nwriting-review + goal/principle audit"];
+      writing_sme -> writing_blind;
+    }
+
+    subgraph cluster_persistence {
+      label="HTS persistence and Spring Data expert";
+      persistence_sme [label="SME review\nJPQL, converters, pagination, case rules"];
+      persistence_blind [label="Blind quality gate\nwriting-review + goal/principle audit"];
+      persistence_sme -> persistence_blind;
+    }
+
+    subgraph cluster_rollout {
+      label="MySQL DDL and rollout expert";
+      rollout_sme [label="SME review\nINSTANT DDL, legacy rows, deploy order"];
+      rollout_blind [label="Blind quality gate\nwriting-review + goal/principle audit"];
+      rollout_sme -> rollout_blind;
+    }
+
+    subgraph cluster_api {
+      label="API compatibility expert";
+      api_sme [label="SME review\nnullable wire field, clients, method surface"];
+      api_blind [label="Blind quality gate\nwriting-review + goal/principle audit"];
+      api_sme -> api_blind;
+    }
+  }
+
+  synthesis [label="synthesis-review\nload writing-review before drafting,\nmerge, adjudicate, tier, write"];
+  synthesis_blind [label="Blind review of synthesis\nwriting-review criteria"];
+  operator [label="Operator gate\nlocal human approval"];
+  publish [label="Publish\nexact approved comments"];
+
+  grok -> dependency [style=dotted, arrowhead=none];
+  grok -> pedantic_sme;
+  grok -> architecture_iceberg_sme;
+  grok -> testing_sme;
+  grok -> writing_sme;
+  grok -> persistence_sme;
+  grok -> rollout_sme;
+  grok -> api_sme;
+
+  pedantic_blind -> synthesis [label="completed branch packet"];
+  architecture_iceberg_blind -> synthesis;
+  testing_blind -> synthesis;
+  writing_blind -> synthesis;
+  persistence_blind -> synthesis;
+  rollout_blind -> synthesis;
+  api_blind -> synthesis;
+
+  synthesis -> synthesis_blind;
+  synthesis_blind -> operator [label="pass"];
+  operator -> synthesis [constraint=false];
+  operator -> publish;
+}

@@ -1,6 +1,6 @@
 ---
 name: synthesis-review
-description: Synthesis skill that turns expert review reports into the final, post-ready feedback for a code or document review. Takes a target (diff, PR, branch, module, or document), its deployment posture, and one or more expert findings reports; verifies every finding against the target, merges duplicates, adjudicates disagreements, tiers each surviving finding as blocking or follow-up, and converges on the exact tagged comments to post plus an adjudication log. Use this whenever the user asks to synthesize, triage, merge, rank, or finalize review findings from one or more reviewers into the feedback that will actually be delivered.
+description: Synthesis skill that turns completed blind-reviewed SME branch packets into the final, post-ready feedback for a code or document review. Takes a frozen review bundle, deployment posture, and one completed branch packet per selected charter; verifies that each blind quality gate passed the SME report for stand-alone writing and charter-principle conformance, merges duplicates, adjudicates cross-branch disagreements, tiers each surviving finding as blocking or follow-up, and converges on the exact tagged comments to post plus an adjudication log. Use this whenever the user asks to synthesize, triage, merge, rank, or finalize review findings into the feedback that will actually be delivered.
 ---
 
 # Synthesis review
@@ -15,52 +15,74 @@ The rest of this file is the procedure; the judgment criteria live in PRINCIPLES
 
 | Input | Content | If absent |
 |---|---|---|
-| Target | The code or document reviewed: a diff, PR, branch, module path, or document | Required; stop and ask |
+| Review bundle | Frozen target, base and head identifiers, governing specifications and explicit requirements, approved contracts, reviewer charters, and supporting source | Required; stop and ask |
 | Posture | Deployment reality: who calls this, what flags gate it, what a mistake costs to fix later | Assume the riskiest posture (live callers, no flag), and say so in the log |
-| Reports | One or more expert reports whose findings carry location, claim, evidence, severity, confidence, and reviewer | Required; a report missing fields is used for what it has, with the gaps noted in the log |
+| Blind-reviewed branch packets | One packet per selected charter. Each packet contains the final SME report and disposition ledger, the dependent `writing-review` result, the charter and principles audit, the correction and verification log, and a blind pass verdict | Required for a complete protocol review. A raw SME report or failed blind gate is not synthesis-ready. |
 
 Severity in a report is the expert's testimony about the defect. It is never overruled as
 testimony and never passes through as the decision: the tier assigned here is the decision.
 
 ## Procedure
 
-1. **Verify every finding against the target.** Check the location exists, the quoted evidence
-   matches the file, and the claim is consistent with the surrounding code or text. A finding
-   that fails any check goes to the adjudication log as *returned* — with what failed — and
-   produces no comment. Silence is the one forbidden outcome: every input finding ends up
-   either in a comment or in the log.
-2. **Merge duplicates.** Two findings with the same location and the same failure are one
+1. **Load the writing criteria before drafting.** Read
+   [`writing-review/SKILL.md`](https://github.com/mkuchenbecker/code-review-skills/blob/main/skills/writing-review/SKILL.md) in full and load the current
+   structure and sentence criteria it requires. Treat those rules as construction constraints
+   for the review body, exact comments, and adjudication log, not as cleanup deferred until the
+   end.
+2. **Verify every branch dependency and quality gate.** Confirm each selected charter has a
+   final SME report and a completed blind review that depends on it. Confirm the blind review
+   applied `writing-review` to the feedback, audited the report against the charter and governing
+   principles, validated every claim and citation, recorded corrections, validated the revision,
+   and issued a pass verdict. A raw SME report, failed blind gate, incomplete audit, or blind
+   review produced before the SME report was complete is returned for completion.
+3. **Preserve blind-validated facts.** Treat each passed branch packet's claims, evidence, and
+   dispositions as already validated. Do not repeat the claim-verification pass in synthesis. If
+   synthesis materially changes a factual claim, quoted evidence, consequence, or fix, validate
+   the changed statement against the frozen bundle and record that validation in the log.
+4. **Merge duplicates.** Two findings with the same location and the same failure are one
    comment citing every reviewer that found it; independent rediscovery raises confidence and
    rank, never comment count. Findings that share a cause but not a location stay separate
    comments that name the shared cause.
-3. **Adjudicate disagreements.** When findings conflict — two incompatible fixes, or one
-   expert's claim contradicting another's — the log states both positions and the deciding
-   reason, and the surviving comment carries the ruling. Never present one side as if the
-   other did not exist, and never post both sides as separate comments.
-4. **Tier each surviving finding: blocking or follow-up.** A finding is *blocking* when
+5. **Adjudicate cross-branch disagreements.** When completed branch packets conflict, either
+   through two incompatible fixes or one charter's claim contradicting another's, the log states
+   both positions and the deciding reason, and the surviving comment carries the ruling. Never
+   present one side as if the other did not exist, and never post both sides as separate
+   comments.
+6. **Tier each surviving finding: blocking or follow-up.** A finding is *blocking* when
    merging without the fix makes the change lie: behavior a green test pins that is wrong,
    a documented claim the code contradicts, or silently wrong answers on the merged surface.
    Everything else is *follow-up*, carrying its named trigger when one exists ("before
    enabling the flag", "at the next dependency upgrade"). Posture is what turns severity
    into tier: the same defect blocks on a live surface and follows up behind a dark flag,
    and the log states which posture fact decided each close call.
-5. **Bound every blocking demand by the diff.** A blocking comment carries a smallest fix
+7. **Bound every blocking demand by the diff.** A blocking comment carries a smallest fix
    proportionate to the change under review. When the true fix is large, the blocking demand
    is the smallest honest step — pin the behavior, correct the document, guard the entry —
    and the large fix is a follow-up. A restructuring demand never blocks a small change.
-6. **Converge to the exact comments.** Each comment is what will be posted, verbatim:
-   a `[category][tier]` prefix (category is the reviewer that found it; a merged comment
-   lists each), the location, and self-contained text stating what happens now, what should
-   happen and why, and the fix. One comment per location: findings that share an anchor are
-   merged or explicitly cross-referenced. Comments are ordered most severe first, numbered
-   once, and never renumbered in a later revision — new findings append.
-7. **Serialize comments for GitHub.** Treat every physical newline in an inline comment as output
+8. **Converge to the exact comments.** Each comment is what will be posted, verbatim.
+   Preserve each expert's identity and stable rule identifier in the prefix. Use
+   `[category][tier]` when a finding has no rule identifier and
+   `[category][rule-id][tier]` when it does, for example
+   `[pedantic-linter][PL-FAIL-001][blocking]`. A merged comment retains every source category and
+   every supplied rule identifier, grouped after its source category, with the tier last. The
+   comment then states the location, what happens now, what should happen and why, and the fix.
+   One comment per location: findings that share an anchor are merged or explicitly
+   cross-referenced. Comments are ordered most severe first, numbered once, and never renumbered
+   in a later revision; new findings append.
+9. **Serialize comments for GitHub.** Treat every physical newline in an inline comment as output
    semantics because GitHub renders it as a visible line break. Put each prose paragraph on one
    physical line, including inline links that continue the sentence. Preserve blank lines between
    paragraphs and the structural lines required by headings, lists, blockquotes, tables, fenced or
    indented code, and explicit hard breaks. Run this normalization before the operator gate so the
    approved exact comment body is byte-for-byte equivalent to the Markdown body field that will be
    posted.
+10. **Pass one blind review of the synthesis.** Run a blind reviewer over the complete review
+    body, exact comment set, and adjudication log using `writing-review` as its criteria. The same
+    synthesis stage corrects every finding and resubmits the revision to the same blind reviewer.
+    There is no second synthesis stage. The synthesis is not operator-ready until this gate
+    passes. This review judges the final writing; it does not repeat source verification already
+    completed by each branch blind review. Validate any factual statement materially changed
+    during correction.
 
 ## Output contract
 
@@ -71,14 +93,24 @@ unreachable, proceed without it, since it is a style dependency and not a correc
 | Part | Content |
 |---|---|
 | Review body | One short body for the whole target: the verdict in plain sentences, the tier counts, and an attribution line naming the criteria the review was generated from, so a reader can inspect what was being judged |
-| Comment set | The numbered, tagged comments exactly as they will be posted, most severe first. Each prose paragraph occupies one physical line; Markdown structural lines remain intact. |
-| Adjudication log | Every returned finding with what failed; every merge with its sources; every disagreement with both positions and the deciding reason; the posture facts (or the stated assumption) that decided tiering |
+| Comment set | The numbered comments exactly as they will be posted, most severe first. Tags preserve each source category and stable rule identifier. Each prose paragraph occupies one physical line; Markdown structural lines remain intact. |
+| Adjudication log | Every incomplete branch dependency or failed blind quality gate; every SME correction required and validated by blind review; every material factual change made during synthesis and its validation; every merge with its sources; every cross-branch disagreement with both positions and the deciding reason; the posture facts (or the stated assumption) that decided tiering |
 
 ## Posture
 
-- Every input finding is accounted for: comment or log entry, never silence.
-- Truth is not re-litigated: a verified finding's claim stands even when inconvenient; a
-  finding is returned for failed verification, not for being unwelcome.
+- Every item in every blind-reviewed branch packet is accounted for: comment or log entry, never
+  silence.
+- A complete protocol review has one completed blind-reviewed branch packet for every selected
+  charter. A raw SME report or unresolved blind-review defect never enters synthesis directly.
+- Synthesis loads `writing-review` before drafting and passes one blind review using
+  `writing-review` before the operator gate.
+- Any operator change returns to this same synthesis stage. Apply the change under stable
+  numbering, then pass the same blind writing review again.
+- Current code, tests, documentation, and repository convention cannot ratify their own defect.
+  They are evidence, not governing authority.
+- A verified finding is not dismissed because it is inconvenient. It can be rejected only when
+  the frozen governing sources or completed branch evidence disproves it, with the reason in the
+  log.
 - Report what the synthesis did not do: dimensions no report covered are named in the review
   body as unreviewed, not silently absent.
 - Anti-noise commitments (violating any is itself a defective synthesis):
@@ -86,4 +118,5 @@ unreachable, proceed without it, since it is a style dependency and not a correc
   - Never inflate a nit's tier to blocking; polish follows up.
   - Never emit two comments where one location carries both.
   - Never drop, soften, or average a disagreement instead of ruling on it.
+  - Never strip a stable rule identifier supplied by an expert.
   - Never leave editor wrapping inside a prose paragraph in the post-ready comment payload.
