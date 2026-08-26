@@ -21,8 +21,8 @@ package fixture.limit;
 public final class RateLimiter {
 
   private final int capacity;
-  private final int refillPerSecond;
   private long lastRefillNanos;
+  private final int refillPerSecond;
   private int tokens;
 
   public RateLimiter(int capacity, int refillPerSecond) {

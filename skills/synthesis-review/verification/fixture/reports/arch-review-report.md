@@ -20,10 +20,10 @@ Target: `target/RateLimiter.java`. Findings most severe first.
 
 | Field | Content |
 |---|---|
-| location | `target/RateLimiter.java` lines 24-25, 38-51; claim at lines 8-9 |
+| location | `target/RateLimiter.java` lines 24 and 26, 38-51; claim at lines 8-9 |
 | principle | Defined behavior; owned vocabulary |
 | claim | The javadoc states "The limiter is thread-safe: any number of threads may call tryAcquire() concurrently", but `lastRefillNanos` and `tokens` are plain mutable fields read and written with no synchronization, no volatile, and no atomics. |
-| evidence | Lines 24-25 declare `private long lastRefillNanos; private int tokens;`; `tryAcquire` (lines 38-51) performs read-modify-write on both. |
+| evidence | Line 24 declares `private long lastRefillNanos;` and line 26 declares `private int tokens;`; `tryAcquire` (lines 38-51) performs read-modify-write on both. |
 | failure scenario | Two threads pass the `tokens > 0` check together and both decrement; the bucket goes negative or over-issues permits; long tearing on `lastRefillNanos` under 32-bit JVMs compounds it. |
 | fix | Synchronize `tryAcquire`, or use `AtomicLong`/`AtomicInteger` with a CAS loop. |
 | severity | blocker |
@@ -34,7 +34,7 @@ Target: `target/RateLimiter.java`. Findings most severe first.
 
 | Field | Content |
 |---|---|
-| location | `target/RateLimiter.java` lines 20-52 |
+| location | `target/RateLimiter.java` lines 21-53 |
 | principle | Narrow contracts; one seam |
 | claim | Time acquisition, refill policy, and token accounting are fused in one class; the class should be restructured into a `RateLimiter` interface, an injected `Clock` seam, and a refill-policy strategy so alternative policies (sliding window, leaky bucket) and deterministic tests become possible. |
 | evidence | `System.nanoTime()` called directly at lines 35 and 39; refill arithmetic inline at lines 40-45. |
@@ -48,10 +48,10 @@ Target: `target/RateLimiter.java`. Findings most severe first.
 
 | Field | Content |
 |---|---|
-| location | `target/RateLimiter.java` lines 22-25 |
+| location | `target/RateLimiter.java` lines 23-26 |
 | principle | none (internal consistency) |
-| claim | The two immutable configuration fields and the two mutable state fields are interleaved with no grouping comment, which reads as four unrelated fields. |
-| evidence | Lines 22-25. |
+| claim | The two immutable configuration fields and the two mutable state fields are interleaved (config, state, config, state) with no grouping, which reads as four unrelated fields. |
+| evidence | Lines 23-26: `capacity`, `lastRefillNanos`, `refillPerSecond`, `tokens`. |
 | failure scenario | None; readability only. |
 | fix | Group config above state, or add a one-line comment separating them. |
 | severity | nit |
