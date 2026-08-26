@@ -5,7 +5,8 @@
     "The output contains, in order: a review body, a numbered comment set, and an adjudication log.",
     "The review body contains an attribution line naming the criteria the review was generated from.",
     "Every comment in the comment set begins with a [category][tier] prefix whose tier is blocking or follow-up.",
-    "The comment set is ordered most severe first, and its first comment is the starvation defect (must_produce id starvation)."
+    "The comment set is ordered most severe first, and its first comment is the starvation defect (must_produce id starvation).",
+    "Inside each comment, every prose paragraph occupies one physical line. No editor-wrapped newline splits a sentence or isolates an inline link. Blank lines and Markdown structural lines for headings, lists, blockquotes, tables, code blocks, and explicit hard breaks are preserved."
   ],
   "must_produce": [
     {

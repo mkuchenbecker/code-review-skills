@@ -40,8 +40,14 @@ stands alone.
    gate.
 6. **Publish.** Comments post exactly as converged, one per location, each prefixed
    `[category][tier]` — category is the reviewer skill that found it, tier is `blocking` or
-   `follow-up`. The per-target review body carries an attribution line naming this repository as
-   the criteria, so readers can inspect what was being judged.
+   `follow-up`. Before posting, each prose paragraph in an inline comment is serialized onto one
+   physical line. GitHub review comments render source newlines as visible line breaks, so
+   editor-wrapped prose produces broken sentences and isolated links. Blank lines still separate
+   paragraphs, and Markdown structure keeps the lines it requires: headings, list items,
+   blockquotes, tables, fenced or indented code, and explicit hard breaks. A link that continues a
+   sentence stays on the same physical line as that sentence. The per-target review body carries
+   an attribution line naming this repository as the criteria, so readers can inspect what was
+   being judged.
 
 Two process rules hold at every stage: every agent checkpoints its working state to disk as it
 goes, so an interrupted run resumes from notes instead of from zero; and every claim is

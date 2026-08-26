@@ -54,6 +54,13 @@ testimony and never passes through as the decision: the tier assigned here is th
    happen and why, and the fix. One comment per location: findings that share an anchor are
    merged or explicitly cross-referenced. Comments are ordered most severe first, numbered
    once, and never renumbered in a later revision — new findings append.
+7. **Serialize comments for GitHub.** Treat every physical newline in an inline comment as output
+   semantics because GitHub renders it as a visible line break. Put each prose paragraph on one
+   physical line, including inline links that continue the sentence. Preserve blank lines between
+   paragraphs and the structural lines required by headings, lists, blockquotes, tables, fenced or
+   indented code, and explicit hard breaks. Run this normalization before the operator gate so the
+   approved exact comment body is byte-for-byte equivalent to the Markdown body field that will be
+   posted.
 
 ## Output contract
 
@@ -64,7 +71,7 @@ unreachable, proceed without it, since it is a style dependency and not a correc
 | Part | Content |
 |---|---|
 | Review body | One short body for the whole target: the verdict in plain sentences, the tier counts, and an attribution line naming the criteria the review was generated from, so a reader can inspect what was being judged |
-| Comment set | The numbered, tagged comments exactly as they will be posted, most severe first |
+| Comment set | The numbered, tagged comments exactly as they will be posted, most severe first. Each prose paragraph occupies one physical line; Markdown structural lines remain intact. |
 | Adjudication log | Every returned finding with what failed; every merge with its sources; every disagreement with both positions and the deciding reason; the posture facts (or the stated assumption) that decided tiering |
 
 ## Posture
@@ -79,3 +86,4 @@ unreachable, proceed without it, since it is a style dependency and not a correc
   - Never inflate a nit's tier to blocking; polish follows up.
   - Never emit two comments where one location carries both.
   - Never drop, soften, or average a disagreement instead of ruling on it.
+  - Never leave editor wrapping inside a prose paragraph in the post-ready comment payload.
