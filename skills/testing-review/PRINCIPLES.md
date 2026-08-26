@@ -28,7 +28,8 @@ The sources, strongest first; the source determines what a failure means.
 
 | Claim source | Test kind | A failure means |
 |---|---|---|
-| Defined behavior (signatures, error contracts, docs) | Contract test | A promise broke |
+| Governing specification, explicit requirement, or approved contract | Contract test | A promise broke |
+| Changed signature, error contract, or documentation consistent with the governing sources | Contract test | The proposed promise broke |
 | Independence assumption ("X shouldn't affect Y") | Crossed axis | The assumption was false |
 | Invariant (algebraic property, race freedom, data integrity) | Property, race check, production assert | The invariant does not hold |
 | Bare observation (no definition exists) | Pin | Behavior changed; someone should look |
@@ -38,6 +39,11 @@ does what the code does, inheriting the blind spots it exists to catch. The
 audit runs both ways. Defined behavior with no test is an unverified promise.
 A test asserting behavior nothing defines is either a pin mislabeled as a
 contract, or the tester authoring a contract nobody committed to.
+
+Changed definitions do not become authoritative because they appear in the PR, and
+existing definitions do not become correct because callers already depend on them.
+Current code and tests are evidence about behavior and migration cost. The
+governing sources decide whether that behavior is a promise worth testing.
 
 ## 2. The cheapest falsifying level
 

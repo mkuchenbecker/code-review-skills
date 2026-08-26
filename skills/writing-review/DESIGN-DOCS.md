@@ -7,8 +7,9 @@ A design document is judged against this structure, in this order:
 2. **Requirements**, tiered as must / should / won't / out of scope. The
    requirements come before the options so that the recommendation is checkable
    against criteria committed in advance, not rationalized after the choice.
-   "Won't" and "out of scope" are load-bearing: they are the document's declared
-   non-goals, written down so omissions are not relitigated in review.
+   "Won't" and "out of scope" are load-bearing proposals, not immunity from
+   review. Validate them against governing requirements and reader obligations.
+   Once validated, they prevent accidental relitigation of the same omission.
 3. **Options with a recommendation, as a table.** Options are rows; the
    requirements become the columns; the recommendation is marked. The table's
    accompanying sentence states the recommendation and the deciding criterion.
@@ -37,6 +38,7 @@ function as a decision record at all.
 |---|---|---|
 | Recommendation absent, buried in details, or stated only at the end | The document's conclusion is its recommendation; readers triage on it | `blocker` |
 | Options presented before requirements, or requirements absent | The recommendation cannot be checked against pre-committed criteria; the document reads as advocacy | `blocker` |
+| A "won't" or out-of-scope claim conflicts with a governing requirement or has no stated basis | The document tables required work by declaration instead of making a reviewable scope decision | `blocker` when it removes a must; otherwise `suggestion` |
 | No "won't" or out-of-scope statements | Scope ambiguity survives into review; omissions get relitigated as oversights | `suggestion` |
 | An option's criteria columns don't match the stated requirements | The evaluation quietly used different criteria than it committed to | `suggestion` |
 | A rejected alternative elaborated in the main line | The main line is for the chosen path; alternatives are appendix evidence | `suggestion` |
