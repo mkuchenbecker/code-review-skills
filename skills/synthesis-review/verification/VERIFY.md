@@ -38,6 +38,10 @@ measures nothing.
 | Restraint | No output violates a `must_not` entry's `detail` | Zero violations |
 | Precision | Every comment matches a `must_produce` entry or an `allowed_extras` entry (location AND described content); anything else counts against precision | Zero unmatched comments |
 
+Grade the formatting requirement against the raw Markdown output. A prose sentence split across
+physical lines fails even when both lines would form the same sentence after whitespace
+normalization. Structural Markdown lines and blank paragraph separators remain valid.
+
 ## Changing the fixture
 
 A fixture edit changes what a correct synthesis produces: a new documented claim in the target,

@@ -66,6 +66,16 @@ what should happen and why, the fix), ordered most severe first, numbered once a
 renumbered — revisions append, because stable numbers are what let a discussion refer to
 "finding 12" a week later.
 
+## 7. Physical newlines are output semantics
+
+An exact comment includes its Markdown layout. GitHub review comments render physical source
+newlines as visible line breaks, so prose wrapped to an editor column reaches the reader as broken
+sentences. Synthesis writes each prose paragraph on one physical line and keeps newlines only where
+Markdown structure needs them: paragraph separators, headings, list items, blockquotes, tables,
+code blocks, and explicit hard breaks. This normalization happens before the operator gate because
+each approved exact comment body and its posted Markdown body field must be byte-for-byte
+equivalent.
+
 ## Symptoms
 
 | Symptom | Causing principle |
@@ -80,3 +90,5 @@ renumbered — revisions append, because stable numbers are what let a discussio
 | An expert's severity passed through as the tier with no posture reasoning | 1, 3 |
 | A follow-up with a real trigger ("before enabling") not naming it | 3 |
 | Renumbered findings between revisions of the same review | 6 |
+| A posted sentence breaks at the source file's editor-wrapping column | 7 |
+| A sentence-leading or sentence-continuing link renders on its own line | 7 |
